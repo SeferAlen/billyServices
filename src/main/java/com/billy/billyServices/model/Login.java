@@ -1,16 +1,6 @@
 package com.billy.billyServices.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.GenerationType;
-import javax.persistence.Column;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.JoinColumn;
-import javax.persistence.CascadeType;
+import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -33,10 +23,11 @@ public class Login implements Serializable {
     @Column(name = "username")
     private String username;
     @NotNull
+    @Size(min = 8, message = "Password must be at least 8 characters long")
     @Column(name = "password")
     private String password;
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "billy_userID", referencedColumnName = "loginID")
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "billy_userID")
     private BillyUser billyUser;
     @ManyToMany
     @JoinTable(
@@ -45,9 +36,22 @@ public class Login implements Serializable {
             inverseJoinColumns = @JoinColumn(name = "roleID"))
     private Set<Role> roles;
 
-    public Login(String username, String password) {
+    public Login() {
+    }
+
+    public Login(@NotNull String username, @NotNull String password) {
         this.username = username;
         this.password = password;
+    }
+
+    public Login(String username, @NotNull @Size(min = 8, message = "Password must be at least 8 characters long") String password, BillyUser billyUser) {
+        this.username = username;
+        this.password = password;
+        this.billyUser = billyUser;
+    }
+
+    public UUID getLoginID() {
+        return loginID;
     }
 
     public String getUsername() {
@@ -64,5 +68,13 @@ public class Login implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public BillyUser getBillyUser() {
+        return billyUser;
+    }
+
+    public void setBillyUser(BillyUser billyUser) {
+        this.billyUser = billyUser;
     }
 }
