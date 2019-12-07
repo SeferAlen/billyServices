@@ -17,6 +17,6 @@ public abstract class basicController {
     protected static final String NOT_NULL = " must not be null";
     protected static final String MIN_SIZE = " min length is required to be ";
     protected static final String EMPTY_SPACE = " ";
+    protected static final String SERVER_ERROR_RESPONSE = "Server error, please contacts us";
     protected static final int EIGHT = 8;
-
 }

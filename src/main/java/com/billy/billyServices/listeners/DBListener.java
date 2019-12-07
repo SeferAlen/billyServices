@@ -20,6 +20,7 @@ import java.util.List;
 public class DBListener {
     private static final String ROLE_ADMIN = "Admin";
     private static final String ROLE_USER = "User";
+    private static final String EMPTY_STRING = "";
     private static final int ZERO = 0;
 
     @Autowired
@@ -58,7 +59,7 @@ public class DBListener {
      */
     private void createDefaultAdminUser() {
 
-        final BillyUser defaultAdminUser = new BillyUser("Admin", "Admin", "", "");
+        final BillyUser defaultAdminUser = new BillyUser(ROLE_ADMIN, ROLE_ADMIN, EMPTY_STRING, EMPTY_STRING);
         final Role defaultAdminUserRole = roleRepository.findByName(ROLE_ADMIN);
     }
 }

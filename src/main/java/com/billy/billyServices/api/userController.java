@@ -25,12 +25,11 @@ public class userController extends basicController {
     private static final String ALREADY_EXIST_RESPONSE = "Username already exist";
     private static final String FAILED_RESPONSE = "User creation failed";
     private static final String CREATED_RESPONSE = "User created";
-    private static final String SERVER_ERROR_RESPONSE = "Server error, please contacts us";
 
     @Autowired
     private UserService userService;
-    private final Logger logger = LoggerFactory.getLogger(loginController.class);
 
+    private final Logger logger = LoggerFactory.getLogger(loginController.class);
 
     /**
      * Get all users from database endpoint

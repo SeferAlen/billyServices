@@ -29,7 +29,7 @@ public class Login implements Serializable {
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "billy_userID")
     private BillyUser billyUser;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "login_roles",
             joinColumns = @JoinColumn(name = "loginID"),
@@ -76,5 +76,13 @@ public class Login implements Serializable {
 
     public void setBillyUser(BillyUser billyUser) {
         this.billyUser = billyUser;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 }

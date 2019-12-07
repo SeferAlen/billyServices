@@ -30,7 +30,8 @@ public class Role implements Serializable {
     @NotNull
     @Column(name = "name")
     private String name;
-    @ManyToMany(mappedBy = "roles")
+    @ManyToMany(fetch = FetchType.LAZY,
+            mappedBy = "roles")
     private Set<Login> logins;
 
     public Role() {
@@ -38,5 +39,9 @@ public class Role implements Serializable {
 
     public Role(@NotNull String name) {
         this.name = name;
+    }
+
+    public String getName() {
+        return name;
     }
 }
