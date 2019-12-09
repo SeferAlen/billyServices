@@ -32,7 +32,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             final Login dbLogin = loginRepository.findByUsername(login.getUsername());
 
             if (dbLogin == null) return new AuthenticationResult(STATUS_NOT_FOUND, NO_TOKEN);
-            final boolean passwordCorrect = passwordEncoder.matches(login.getPassword(), loginRepository.findByUsername(login.getUsername()).getPassword());
+            final boolean passwordCorrect = passwordEncoder.matches(login.getPassword(), dbLogin.getPassword());
             if (!passwordCorrect) return new AuthenticationResult(STATUS_WRONG_PASSWORD, NO_TOKEN);
 
             return new AuthenticationResult(STATUS_OK, JwtUtil.generateToken(dbLogin));

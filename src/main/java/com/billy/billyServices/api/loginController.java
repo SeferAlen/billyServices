@@ -3,9 +3,6 @@ package com.billy.billyServices.api;
 import com.billy.billyServices.model.AuthenticationResult;
 import com.billy.billyServices.model.Login;
 import com.billy.billyServices.service.AuthenticationService;
-import com.billy.billyServices.utility.JwtUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+
 
 /**
  * REST controller for user login

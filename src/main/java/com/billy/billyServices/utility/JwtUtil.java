@@ -1,5 +1,6 @@
 package com.billy.billyServices.utility;
 
+import com.billy.billyServices.enums.TokenStatus;
 import com.billy.billyServices.model.BillyUser;
 import com.billy.billyServices.model.Login;
 import com.billy.billyServices.model.Role;
@@ -74,95 +75,106 @@ public class JwtUtil {
                 .signWith(SignatureAlgorithm.HS512, jwtSecret).compact();
     }
 
-//    /**
-//     * Method for getting username from token claims
-//     *
-//     * @param token {@link String} the token
-//     * @return {@link String}      the username
-//     */
-//    public static String getUsernameFromToken(final String token) {
-//        Objects.requireNonNull(token, TOKEN_NULL);
-//
-//        return getClaimFromToken(token, Claims::getSubject);
-//    }
-//
-//    /**
-//     * Method for getting expiration date from token claims
-//     *
-//     * @param token {@link String} the token
-//     * @return {@link Date}        the expiration date
-//     */
-//    public static Date getExpirationDateFromToken(final String token) {
-//        Objects.requireNonNull(token, TOKEN_NULL);
-//
-//        return getClaimFromToken(token, Claims::getExpiration);
-//    }
-//
-//    /**
-//     * Generic method for getting claim from token
-//     *
-//     * @param token          {@link String}              the token
-//     * @param claimsResolver {@link Function<Claims, T>} the function
-//     * @return {@link T}                                 the claim
-//     */
-//    public static <T> T getClaimFromToken(final String token, final Function<Claims, T> claimsResolver) {
-//        Objects.requireNonNull(token, TOKEN_NULL);
-//        Objects.requireNonNull(claimsResolver, CLAIMS_RESOLVER_NULL);
-//
-//        final Claims claims = getAllClaimsFromToken(token);
-//        return claimsResolver.apply(claims);
-//    }
-//
-//    /**
-//     * Method for getting all claims from token
-//     *
-//     * @param token {@link String} the token
-//     * @return {@link Claims}      the claims
-//     */
-//    public static Claims getAllClaimsFromToken(final String token) {
-//        Objects.requireNonNull(token, TOKEN_NULL);
-//
-//        return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody();
-//    }
-//
-//    /**
-//     * Method for decoding token
-//     *
-//     * @param token {@link String} the token
-//     * @return {@link Claims}      the claims
-//     */
-//    public static Claims decodeJWT(final String token) {
-//        Objects.requireNonNull(token, TOKEN_NULL);
-//
-//        final Claims claims = Jwts.parser()
-//                .setSigningKey(DatatypeConverter.parseBase64Binary(jwtSecret))
-//                .parseClaimsJws(token).getBody();
-//
-//        return claims;
-//    }
-//
-//    /**
-//     * Method for validating token
-//     *
-//     * @param token {@link String} the token
-//     */
-//    public static void validateToken(final String token) throws TokenExpiredException {
-//        Objects.requireNonNull(token, TOKEN_NULL);
-//
-//        if(isTokenExpired(token)) throw new TokenExpiredException("Token " + token + " is expired");
-//        decodeJWT(token);
-//    }
-//
-//
-//    /**
-//     * Method for checking is token expired
-//     *
-//     * @param token {@link String} the token
-//     * @return {@link boolean}     the token expire status
-//     */
-//    private static Boolean isTokenExpired(final String token) {
-//        final Date expiration = getExpirationDateFromToken(token);
-//        return expiration.before(new Date());
-//    }
-//
+    /**
+     * Method for getting username from token claims
+     *
+     * @param token {@link String} the token
+     * @return {@link String}      the username
+     */
+    public static String getUsernameFromToken(final String token) {
+        Objects.requireNonNull(token, TOKEN_NULL);
+
+        return getClaimFromToken(token, Claims::getSubject);
+    }
+
+    /**
+     * Method for getting expiration date from token claims
+     *
+     * @param token {@link String} the token
+     * @return {@link Date}        the expiration date
+     */
+    public static Date getExpirationDateFromToken(final String token) {
+        Objects.requireNonNull(token, TOKEN_NULL);
+
+        return getClaimFromToken(token, Claims::getExpiration);
+    }
+
+    /**
+     * Generic method for getting claim from token
+     *
+     * @param token          {@link String}              the token
+     * @param claimsResolver {@link Function<Claims, T>} the function
+     * @return {@link T}                                 the claim
+     */
+    public static <T> T getClaimFromToken(final String token, final Function<Claims, T> claimsResolver) {
+        Objects.requireNonNull(token, TOKEN_NULL);
+        Objects.requireNonNull(claimsResolver, CLAIMS_RESOLVER_NULL);
+
+        final Claims claims = getAllClaimsFromToken(token);
+        return claimsResolver.apply(claims);
+    }
+
+    /**
+     * Method for getting all claims from token
+     *
+     * @param token {@link String} the token
+     * @return {@link Claims}      the claims
+     */
+    public static Claims getAllClaimsFromToken(final String token) {
+        Objects.requireNonNull(token, TOKEN_NULL);
+
+        return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody();
+    }
+
+
+    public static String getRoleFromToken(final String token) {
+        Objects.requireNonNull(token, TOKEN_NULL);
+
+        final Claims claims = getAllClaimsFromToken(token);
+        return claims.get("Role").toString();
+    }
+
+
+    /**
+     * Method for decoding token
+     *
+     * @param token {@link String} the token
+     * @return {@link Claims}      the claims
+     */
+    public static Claims decodeJWT(final String token) {
+        Objects.requireNonNull(token, TOKEN_NULL);
+
+        final Claims claims = Jwts.parser()
+                .setSigningKey(DatatypeConverter.parseBase64Binary(jwtSecret))
+                .parseClaimsJws(token).getBody();
+
+        return claims;
+    }
+
+    /**
+     * Method for validating token
+     *
+     * @param token {@link String} the token
+     */
+    public static TokenStatus validateToken(final String token) {
+        Objects.requireNonNull(token, TOKEN_NULL);
+
+        if(isTokenExpired(token)) return TokenStatus.EXPIRED;
+        decodeJWT(token);
+
+        return TokenStatus.OK;
+    }
+
+
+    /**
+     * Method for checking is token expired
+     *
+     * @param token {@link String} the token
+     * @return {@link boolean}     the token expire status
+     */
+    private static Boolean isTokenExpired(final String token) {
+        final Date expiration = getExpirationDateFromToken(token);
+        return expiration.before(new Date());
+    }
+
 }

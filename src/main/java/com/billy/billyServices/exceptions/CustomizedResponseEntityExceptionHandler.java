@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.Null;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -41,7 +43,7 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
     private static final String TOKEN_SIGNATURE_INVALID = "Token signature not valid";
     private static final String TOKEN_ILLEGAL = "Illegal token";
     private static final String WRONG_PASSWORD = "Wrong password";
-    private static final String USER_NOT_EXIST = "User does not exist";
+    private static final String REQUEST_PARAM_NULL = "Request parameter is null";
     private static final String SERVICE_ERROR_MESSAGE = "Service error";
     private static final String SERVICE_ERROR_DETAILS = "Please contact us with about this";
 
@@ -74,5 +76,23 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
         final String listString = String.join(", ", errors);
 
         return new ResponseEntity<>(new ErrorDetails(nowFormatted, VALIDATION_FAILED, listString), HTTP_BAD_REQUEST);
+    }
+
+    /**
+     * Method for default exception handling
+     *
+     * @param ex       {@link MethodArgumentNotValidException} the thrown exception
+     * @param request  {@link HttpHeaders}                     the http headers
+     * @param response {@link HttpStatus}                      the http status
+     * @return {@link ResponseEntity} with {@link ErrorDetails} as body and {@link HttpStatus} http status
+     */
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Object> defaultExceptionHandle(final Exception ex,
+                                                         final HttpServletRequest request,
+                                                         final HttpServletResponse response) {
+        if (ex instanceof NullPointerException) {
+            new ResponseEntity(REQUEST_PARAM_NULL, HTTP_INTERNAL_ERROR);
+        }
+        return new ResponseEntity(SERVICE_ERROR_DETAILS, HTTP_INTERNAL_ERROR);
     }
 }

@@ -1,12 +1,16 @@
 package com.billy.billyServices.listeners;
 
 import com.billy.billyServices.model.BillyUser;
+import com.billy.billyServices.model.Login;
 import com.billy.billyServices.model.Role;
+import com.billy.billyServices.repository.LoginRepository;
 import com.billy.billyServices.repository.RoleRepository;
+import com.billy.billyServices.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.text.SimpleDateFormat;
@@ -25,6 +29,12 @@ public class DBListener {
 
     @Autowired
     private RoleRepository roleRepository;
+    @Autowired
+    private LoginRepository loginRepository;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     @Value("${default.user.password}")
     private String defaultPassword;
 
@@ -59,7 +69,14 @@ public class DBListener {
      */
     private void createDefaultAdminUser() {
 
-        final BillyUser defaultAdminUser = new BillyUser(ROLE_ADMIN, ROLE_ADMIN, EMPTY_STRING, EMPTY_STRING);
-        final Role defaultAdminUserRole = roleRepository.findByName(ROLE_ADMIN);
+        Login adminLogin = loginRepository.findByUsername(ROLE_ADMIN);
+        if (adminLogin == null) {
+            final BillyUser defaultAdminUser = new BillyUser(ROLE_ADMIN, ROLE_ADMIN, EMPTY_STRING, EMPTY_STRING);
+            adminLogin = new Login(ROLE_ADMIN, defaultPassword);
+
+            userService.createAdmin(defaultAdminUser, adminLogin);
+        } else {
+            // Nothing to do here
+        }
     }
 }
