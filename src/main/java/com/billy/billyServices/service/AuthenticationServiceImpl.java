@@ -12,6 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
+
+/**
+ * Service for users authentication and authentication related actions
+ */
 @Service
 public class AuthenticationServiceImpl implements AuthenticationService {
     private static final AuthenticationStatus STATUS_NOT_FOUND = AuthenticationStatus.USER_NOT_FOUND;
@@ -19,6 +24,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private static final AuthenticationStatus STATUS_OK = AuthenticationStatus.OK;
     private static final AuthenticationStatus STATUS_FAILED = AuthenticationStatus.FAILED;
     private static final String NO_TOKEN = "";
+    private static final String LOGIN_NULL = "Login must not be null";
 
     @Autowired
     private LoginRepository loginRepository;
@@ -27,7 +33,16 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     private final Logger logger = LoggerFactory.getLogger(loginController.class);
 
+    /**
+     * Method for generating Jwt
+     *
+     * @param login {@link Login} the login containing username and password
+     * @return {@link AuthenticationResult} the result of generating Jwt containing token if login data is valid and
+     * {@link AuthenticationStatus} representing status token generating action
+     */
     public AuthenticationResult generateJwt(final Login login) {
+        Objects.requireNonNull(login, LOGIN_NULL);
+
         try {
             final Login dbLogin = loginRepository.findByUsername(login.getUsername());
 

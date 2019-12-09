@@ -40,14 +40,10 @@ public class loginController extends basicController {
         final AuthenticationResult authenticationResult = authenticationService.generateJwt(login);
 
         switch (authenticationResult.getStatus()) {
-            case USER_NOT_FOUND:
-                return new ResponseEntity<>(USER_NOT_FOUND, HTTP_BAD_REQUEST);
-            case WRONG_PASSWORD:
-                return new ResponseEntity<>(WRONG_PASSWORD, HTTP_BAD_REQUEST);
-            case OK:
-                return new ResponseEntity<>(authenticationResult.getToken(), HTTP_OK);
-            default:
-                return new ResponseEntity<>(SERVER_ERROR_RESPONSE, HTTP_INTERNAL_ERROR);
+            case USER_NOT_FOUND: return new ResponseEntity<>(USER_NOT_FOUND, HTTP_BAD_REQUEST);
+            case WRONG_PASSWORD: return new ResponseEntity<>(WRONG_PASSWORD, HTTP_BAD_REQUEST);
+            case OK: return new ResponseEntity<>(authenticationResult.getToken(), HTTP_OK);
+            default: return new ResponseEntity<>(SERVER_ERROR_RESPONSE, HTTP_INTERNAL_ERROR);
         }
     }
 }

@@ -5,7 +5,9 @@ import com.billy.billyServices.enums.TokenStatus;
 import com.billy.billyServices.model.AuthorizationResult;
 import com.billy.billyServices.model.Role;
 import com.billy.billyServices.repository.RoleRepository;
+import com.billy.billyServices.service.AuthorizationService;
 import com.billy.billyServices.utility.JwtUtil;
+import com.billy.billyServices.utility.PatternUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +32,7 @@ public abstract class basicController {
     protected static final String NOT_NULL = " must not be null";
     protected static final String MIN_SIZE = " min length is required to be ";
     protected static final String EMPTY_SPACE = " ";
+    protected static final String EMPTY_STRING = "";
     protected static final String SERVER_ERROR_RESPONSE = "Server error, please contacts us";
     protected static final String ROLE_ADMIN = "Admin";
     protected static final String ROLE_USER = "User";
@@ -50,39 +53,45 @@ public abstract class basicController {
     }
 
     @Autowired
-    private RoleRepository roleRepository;
+    private AuthorizationService authorizationService;
 
     private final Logger logger = LoggerFactory.getLogger(loginController.class);
 
-    protected AuthorizationResult authorize(final String token, final List<String> requiredRoleNames) {
+    /**
+     * Method for authorization across controllers
+     *
+     * @param auth {@link String}                    the Authorization header
+     * @param requiredRoleNames {@link List<String>} the list of required roles
+     * @return {@link AuthorizationResult} the response containing {@link ResponseEntity} with body (if and only if Authorization status is UNAUTHORIZED)
+     * and Authorization status
+     */
+    protected AuthorizationResult authorize(final String auth, final List<String> requiredRoleNames) {
 
         try{
-            final TokenStatus tokenStatus = JwtUtil.validateToken(token);
+            final TokenStatus tokenStatus = authorizationService.checkToken(auth);
 
             switch (tokenStatus) {
-                case EXPIRED: return new AuthorizationResult(new ResponseEntity<>(TOKEN_EXPIRED, HTTP_BAD_REQUEST), STATUS_UNAUTHORIZED);
+                case EXPIRED:
+                    return new AuthorizationResult(new ResponseEntity<>(TOKEN_EXPIRED, HTTP_BAD_REQUEST),
+                            STATUS_UNAUTHORIZED);
+
+                case INVALID_FORMAT:
+                    return new AuthorizationResult(new ResponseEntity<>(EMPTY_SPACE, HTTP_BAD_REQUEST),
+                            STATUS_UNAUTHORIZED);
 
                 case OK: {
-                    final String userRoleName = JwtUtil.getRoleFromToken(token);
-                    final Role userRole = roleRepository.findByName(userRoleName);
-
-                    final List<Role> allowedRoles = new ArrayList<>();
-                    for (final String roleName : requiredRoleNames) {
-                        final Role role = roleRepository.findByName(roleName);
-
-                        allowedRoles.add(role);
-                    }
-
-                    if (allowedRoles.contains(userRole)) return new AuthorizationResult(null, STATUS_AUTHORIZED);
-                    else return new AuthorizationResult(new ResponseEntity<>(UNAUTHORIZED, HTTP_UNAUTHORIZED), STATUS_UNAUTHORIZED);
+                    final String token = auth.substring(auth.indexOf(EMPTY_SPACE));
+                    return authorizationService.authorize(token, requiredRoleNames);
                 }
 
-                default: return new AuthorizationResult(new ResponseEntity<>(SERVER_ERROR_RESPONSE, HTTP_INTERNAL_ERROR), STATUS_UNAUTHORIZED);
+                default: return new AuthorizationResult(new ResponseEntity<>(SERVER_ERROR_RESPONSE, HTTP_INTERNAL_ERROR),
+                        STATUS_UNAUTHORIZED);
             }
         } catch (final Exception e) {
             logger.error(e.getLocalizedMessage());
 
-            return new AuthorizationResult(new ResponseEntity<>(SERVER_ERROR_RESPONSE, HTTP_INTERNAL_ERROR), STATUS_UNAUTHORIZED);
+            return new AuthorizationResult(new ResponseEntity<>(SERVER_ERROR_RESPONSE, HTTP_INTERNAL_ERROR),
+                    STATUS_UNAUTHORIZED);
         }
     }
 }

@@ -9,6 +9,7 @@ import com.billy.billyServices.model.Register;
 import com.billy.billyServices.model.Token;
 import com.billy.billyServices.service.UserService;
 import com.billy.billyServices.utility.JwtUtil;
+import com.billy.billyServices.utility.PatternUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,9 +27,11 @@ import java.util.ArrayList;
 @RequestMapping("/user")
 public class userController extends basicController {
     private static final String ALREADY_EXIST_RESPONSE = "Username already exist";
-    private static final String FAILED_RESPONSE = "User creation failed";
+    private static final String USER_CREATE_FAILED_RESPONSE = "User creation failed";
+    private static final String PASSWORD_CHANGE_FAILED_RESPONSE = "User creation failed";
     private static final String CREATED_RESPONSE = "User created";
     private static final String PASSWORD_CHANGED = "Password changed";
+    private static final String PASSWORD_SAME = "Password is same as old password";
     private static final PasswordChangeStatus PASSWORD_CHANGE_FAILED_STATUS = PasswordChangeStatus.FAILED;
     private static final PasswordChangeStatus PASSWORD_CHANGED_STATUS = PasswordChangeStatus.CHANGED;
 
@@ -60,14 +63,10 @@ public class userController extends basicController {
         final UserCreateStatus createStatus = userService.createUser(register.getBillyUser(), register.getLogin());
 
         switch (createStatus) {
-            case ALREADY_EXIST:
-                return new ResponseEntity<>(ALREADY_EXIST_RESPONSE, HTTP_BAD_REQUEST);
-            case FAILED:
-                return new ResponseEntity<>(FAILED_RESPONSE, HTTP_BAD_REQUEST);
-            case CREATED:
-                return new ResponseEntity<>(CREATED_RESPONSE, HTTP_BAD_REQUEST);
-            default:
-                return new ResponseEntity<>(SERVER_ERROR_RESPONSE, HTTP_INTERNAL_ERROR);
+            case ALREADY_EXIST: return new ResponseEntity<>(ALREADY_EXIST_RESPONSE, HTTP_BAD_REQUEST);
+            case FAILED: return new ResponseEntity<>(USER_CREATE_FAILED_RESPONSE, HTTP_BAD_REQUEST);
+            case CREATED: return new ResponseEntity<>(CREATED_RESPONSE, HTTP_BAD_REQUEST);
+            default: return new ResponseEntity<>(SERVER_ERROR_RESPONSE, HTTP_INTERNAL_ERROR);
         }
     }
 
@@ -75,24 +74,24 @@ public class userController extends basicController {
      * Change password endpoint
      *
      * @param newPassword {@link NewPassword} the newPassword
-     * @return {@link ResponseEntity} the response entity with body with message status and Http status
+     * @return {@link ResponseEntity} the response entity with body containing message and Http status
      */
     @PostMapping(value = "/password", consumes = "application/json", produces = "application/json")
     public ResponseEntity<?> changePassword(@RequestHeader("Authorization") final String auth,
                                             @Valid@RequestBody final NewPassword newPassword) {
 
-        final String token = auth.substring(auth.indexOf(EMPTY_SPACE));
-
-        final AuthorizationResult authorizationResult = authorize(token, ALL_ROLES);
+        final AuthorizationResult authorizationResult = authorize(auth, ONLY_USER_ROLE);
 
         if (authorizationResult.getAuthorizationStatus() == STATUS_AUTHORIZED) {
+            final String token = auth.substring(auth.indexOf(EMPTY_SPACE));
             final PasswordChangeStatus passwordChangeStatus = userService.changePassword(JwtUtil.getUsernameFromToken(token),
                     newPassword.getPassword());
 
-            if (passwordChangeStatus == PASSWORD_CHANGED_STATUS) {
-                return new ResponseEntity<>(PASSWORD_CHANGED, HTTP_OK);
-            } else {
-                return new ResponseEntity<>(UNAUTHORIZED, HTTP_UNAUTHORIZED);
+            switch (passwordChangeStatus) {
+                case SAME_PASSWORD: return new ResponseEntity<>(PASSWORD_SAME, HTTP_OK);
+                case CHANGED: return new ResponseEntity<>(PASSWORD_CHANGED, HTTP_OK);
+                case FAILED: return new ResponseEntity<>(PASSWORD_CHANGE_FAILED_RESPONSE, HTTP_BAD_REQUEST);
+                default: return new ResponseEntity<>(SERVER_ERROR_RESPONSE, HTTP_INTERNAL_ERROR);
             }
         } else {
             return authorizationResult.getResponseEntity();

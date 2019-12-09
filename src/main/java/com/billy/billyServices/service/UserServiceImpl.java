@@ -27,8 +27,9 @@ public class UserServiceImpl implements UserService {
     private static final UserCreateStatus STATUS_CREATED = UserCreateStatus.CREATED;
     private static final UserCreateStatus STATUS_ALREADY_EXIST = UserCreateStatus.ALREADY_EXIST;
     private static final UserCreateStatus STATUS_FAILED = UserCreateStatus.FAILED;
-    private static final PasswordChangeStatus PASSWORD_CHANGE_FAILED_STATUS = PasswordChangeStatus.FAILED;
+    private static final PasswordChangeStatus PASSWORD_SAME_STATUS = PasswordChangeStatus.SAME_PASSWORD;
     private static final PasswordChangeStatus PASSWORD_CHANGED_STATUS = PasswordChangeStatus.CHANGED;
+    private static final PasswordChangeStatus PASSWORD_CHANGE_FAILED_STATUS = PasswordChangeStatus.FAILED;
     private static final String ROLE_ADMIN = "Admin";
     private static final String ROLE_USER = "User";
     private static final String USER_NULL = "User must not be null";
@@ -89,12 +90,15 @@ public class UserServiceImpl implements UserService {
 
         try {
             final Login userLogin = loginRepository.findByUsername(username);
-            final String newPasswordHash = passwordEncoder.encode(newPassword);
-            userLogin.setPassword(newPasswordHash);
+            final boolean passwordSame = passwordEncoder.matches(newPassword, userLogin.getPassword());
+            if (passwordSame) return PASSWORD_SAME_STATUS;
 
+            final String newPasswordHash = passwordEncoder.encode(newPassword);
+
+            userLogin.setPassword(newPasswordHash);
             loginRepository.save(userLogin);
 
-            return PasswordChangeStatus.CHANGED;
+            return PASSWORD_CHANGED_STATUS;
         } catch (final Exception e) {
             logger.error(e.getLocalizedMessage());
 
