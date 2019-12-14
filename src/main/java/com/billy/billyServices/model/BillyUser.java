@@ -1,15 +1,8 @@
 package com.billy.billyServices.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.GenerationType;
-import javax.persistence.Column;
-import javax.persistence.JoinTable;
-import javax.persistence.OneToOne;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -40,8 +33,12 @@ public class BillyUser implements Serializable {
     @NotNull
     @Column(name = "phone")
     private String phone;
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @OneToOne(mappedBy = "billyUser")
     private Login login;
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
+    private Set<Bill> bills;
 
     public BillyUser() {
     }

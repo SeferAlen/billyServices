@@ -26,7 +26,7 @@ public class Login implements Serializable {
     @Size(min = 8, message = "Password must be at least 8 characters long")
     @Column(name = "password")
     private String password;
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "billy_userID")
     private BillyUser billyUser;
     @ManyToMany(fetch = FetchType.LAZY)

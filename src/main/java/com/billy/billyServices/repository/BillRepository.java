@@ -1,10 +1,12 @@
 package com.billy.billyServices.repository;
 
 import com.billy.billyServices.model.Bill;
-import com.billy.billyServices.model.BillyUser;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
 import java.util.UUID;
 
-public interface UserRepository extends JpaRepository<BillyUser, UUID> {
+public interface BillRepository extends JpaRepository<Bill, UUID> {
+
 }

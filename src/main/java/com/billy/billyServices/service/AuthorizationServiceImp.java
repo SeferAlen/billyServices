@@ -75,4 +75,30 @@ public class AuthorizationServiceImp implements AuthorizationService {
         if (allowedRoles.contains(userRole)) return new AuthorizationResult(null, STATUS_AUTHORIZED);
         else return new AuthorizationResult(new ResponseEntity<>(UNAUTHORIZED, HTTP_UNAUTHORIZED), STATUS_UNAUTHORIZED);
     }
+
+    /**
+     * Method to get {@link Role} from Authorization header
+     *
+     * @param auth {@link String} the Authorization header
+     * @return {@link Role} the role
+     */
+    public Role getRole(final String auth) {
+        Objects.requireNonNull(auth, AUTH_NULL);
+
+        final String token = auth.substring(auth.indexOf(EMPTY_SPACE));
+        return roleRepository.findByName(JwtUtil.getRoleFromToken(token));
+    }
+
+    /**
+     * Method to get username from Authorization header
+     *
+     * @param auth {@link String} the Authorization header
+     * @return {@link String} the username
+     */
+    public String getUsername(final String auth) {
+        Objects.requireNonNull(auth, AUTH_NULL);
+
+        final String token = auth.substring(auth.indexOf(EMPTY_SPACE));
+        return JwtUtil.getUsernameFromToken(token);
+    }
 }

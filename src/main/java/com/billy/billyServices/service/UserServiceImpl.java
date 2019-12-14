@@ -1,14 +1,17 @@
 package com.billy.billyServices.service;
 
 import com.billy.billyServices.api.loginController;
+import com.billy.billyServices.enums.GetUsersStatus;
 import com.billy.billyServices.enums.PasswordChangeStatus;
 import com.billy.billyServices.enums.UserCreateStatus;
 import com.billy.billyServices.model.BillyUser;
+import com.billy.billyServices.model.GetUsersResult;
 import com.billy.billyServices.model.Login;
 import com.billy.billyServices.model.Role;
 import com.billy.billyServices.repository.LoginRepository;
 import com.billy.billyServices.repository.RoleRepository;
 import com.billy.billyServices.repository.UserRepository;
+import com.billy.billyServices.utility.ConverterUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +19,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
+import java.util.ArrayList;
 import java.util.Set;
 
 /**
@@ -30,12 +35,15 @@ public class UserServiceImpl implements UserService {
     private static final PasswordChangeStatus PASSWORD_SAME_STATUS = PasswordChangeStatus.SAME_PASSWORD;
     private static final PasswordChangeStatus PASSWORD_CHANGED_STATUS = PasswordChangeStatus.CHANGED;
     private static final PasswordChangeStatus PASSWORD_CHANGE_FAILED_STATUS = PasswordChangeStatus.FAILED;
+    private static final GetUsersStatus NO_USERS = GetUsersStatus.NO_USERS;
+    private static final GetUsersStatus GET_USERS_STATUS_FAILED = GetUsersStatus.FAILED;
+    private static final GetUsersStatus GET_USERS_STATUS_OK = GetUsersStatus.OK;
     private static final String ROLE_ADMIN = "Admin";
     private static final String ROLE_USER = "User";
-    private static final String USER_NULL = "User must not be null";
-    private static final String USERNAME_NULL = "Username must not be null";
-    private static final String LOGIN_NULL = "Login must not be null";
-    private static final String PASSWORD_NULL = "Password must not be null";
+    private static final String USER_NULL = "user must not be null";
+    private static final String USERNAME_NULL = "username must not be null";
+    private static final String LOGIN_NULL = "login must not be null";
+    private static final String PASSWORD_NULL = "password must not be null";
     private static final String CREATED = " created";
 
     @Autowired
@@ -47,7 +55,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    private final Logger logger = LoggerFactory.getLogger(loginController.class);
+    private final Logger logger = LoggerFactory.getLogger(UserService.class);
 
     /**
      * Method for creating new user
@@ -103,6 +111,27 @@ public class UserServiceImpl implements UserService {
             logger.error(e.getLocalizedMessage());
 
             return PASSWORD_CHANGE_FAILED_STATUS;
+        }
+    }
+
+    /**
+     * Method for getting all users
+     *
+     * @return {@link GetUsersResult} the object containing {@link ArrayList<BillyUser>} if request valid and {@link GetUsersStatus}
+     */
+    public GetUsersResult getUsers() {
+
+        try {
+            final List<BillyUser> users = userRepository.findAll();
+
+            if (users.isEmpty()) return new GetUsersResult(NO_USERS);
+            else {
+                return new GetUsersResult(ConverterUtil.fromBillyUserToBillyUserResponse(users), GET_USERS_STATUS_OK);
+            }
+        } catch (final Exception e) {
+            logger.error(e.getLocalizedMessage());
+
+            return new GetUsersResult(GET_USERS_STATUS_FAILED);
         }
     }
 

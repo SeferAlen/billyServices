@@ -17,10 +17,10 @@ import java.util.*;
 import java.util.function.Function;
 
 /**
- * Utility method for json web token related actions
+ * Utility methods for json web token related actions
  */
 @Component
-public class JwtUtil {
+public class JwtUtil implements Serializable {
     private static final String TOKEN_NULL = "Token must not be null";
     private static final String CLAIMS_RESOLVER_NULL = "Claims resolver function must not be null";
     private static final String LOGIN_NULL = "Login must not be null";
@@ -126,12 +126,17 @@ public class JwtUtil {
         return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody();
     }
 
-
+    /**
+     * Method for getting role from token claims
+     *
+     * @param token {@link String} the token
+     * @return {@link Claims}      the claims
+     */
     public static String getRoleFromToken(final String token) {
         Objects.requireNonNull(token, TOKEN_NULL);
 
         final Claims claims = getAllClaimsFromToken(token);
-        return claims.get("Role").toString();
+        return claims.get(CLAIM_ROLE).toString();
     }
 
 

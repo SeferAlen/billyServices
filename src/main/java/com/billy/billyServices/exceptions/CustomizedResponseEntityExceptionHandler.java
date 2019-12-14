@@ -1,5 +1,6 @@
 package com.billy.billyServices.exceptions;
 
+import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -34,7 +35,7 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
     private static final HttpStatus HTTP_BAD_REQUEST = HttpStatus.BAD_REQUEST;
     private static final HttpStatus HTTP_INTERNAL_ERROR = HttpStatus.INTERNAL_SERVER_ERROR;
     private static final String DATE_FORMAT = "yyyy-MM-dd hh:mm:ss";
-    private static final String EXCEPTION_NULL = "Exception must not be null";
+    private static final String EXCEPTION_NULL = "exception must not be null";
     private static final String EXCEPTION_UNEXPECTED = "Unexpected exception or error";
     private static final String VALIDATION_FAILED = "Validation failed";
     private static final String TOKEN_EXPIRED = "Token expired";
@@ -79,6 +80,96 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
     }
 
     /**
+     * Method for handling expired JWT exception
+     *
+     * @param ex {@link ExpiredJwtException} the trowed exception
+     * @return {@link ResponseEntity} with {@link ErrorDetails} as body and {@link HttpStatus} http status
+     */
+    @ExceptionHandler(ExpiredJwtException.class)
+    protected ResponseEntity<Object> handleExpiredJwtException(final ExpiredJwtException ex) {
+        Objects.requireNonNull(ex, EXCEPTION_NULL);
+
+        return new ResponseEntity<>(new ErrorDetails(new Date().toString(), TOKEN_EXPIRED, ex.getLocalizedMessage()),
+                HTTP_UNAUTHORIZED
+        );
+    }
+
+    /**
+     * Method for handling unsupported JWT exception
+     *
+     * @param ex {@link UnsupportedJwtException} the trowed exception
+     * @return {@link ResponseEntity} with {@link ErrorDetails} as body and {@link HttpStatus} http status
+     */
+    @ExceptionHandler(UnsupportedJwtException.class)
+    protected ResponseEntity<Object> handleUnsupportedJwtException(final UnsupportedJwtException ex) {
+        Objects.requireNonNull(ex, EXCEPTION_NULL);
+
+        return new ResponseEntity<>(new ErrorDetails(new Date().toString(), TOKEN_UNSUPPORTED, ex.getLocalizedMessage()),
+                HttpStatus.UNAUTHORIZED
+        );
+    }
+
+    /**
+     * Method for handling malformed JWT exception
+     *
+     * @param ex {@link MalformedJwtException} the trowed exception
+     * @return {@link ResponseEntity} with {@link ErrorDetails} as body and {@link HttpStatus} http status
+     */
+    @ExceptionHandler(MalformedJwtException.class)
+    protected ResponseEntity<Object> handleMalformedJwtException(final MalformedJwtException ex) {
+        Objects.requireNonNull(ex, EXCEPTION_NULL);
+
+        return new ResponseEntity<>(new ErrorDetails(new Date().toString(), TOKEN_MALFORMED, ex.getLocalizedMessage()),
+                HTTP_UNAUTHORIZED
+        );
+    }
+
+    /**
+     * Method for handling signature JWT exception
+     *
+     * @param ex {@link SignatureException} the trowed exception
+     * @return {@link ResponseEntity} with {@link ErrorDetails} as body and {@link HttpStatus} http status
+     */
+    @ExceptionHandler(SignatureException.class)
+    protected ResponseEntity<Object> handleSignatureException(final SignatureException ex) {
+        Objects.requireNonNull(ex, EXCEPTION_NULL);
+
+        return new ResponseEntity<>(new ErrorDetails(new Date().toString(), TOKEN_SIGNATURE_INVALID, ex.getLocalizedMessage()),
+                HTTP_UNAUTHORIZED
+        );
+    }
+
+    /**
+     * Method for handling invalid claim JWT exception
+     *
+     * @param ex {@link InvalidClaimException} the trowed exception
+     * @return {@link ResponseEntity} with {@link ErrorDetails} as body and {@link HttpStatus} http status
+     */
+    @ExceptionHandler(InvalidClaimException.class)
+    protected ResponseEntity<Object> handleInvalidClaimException(final InvalidClaimException ex) {
+        Objects.requireNonNull(ex, EXCEPTION_NULL);
+
+        return new ResponseEntity<>(new ErrorDetails(new Date().toString(), TOKEN_ILLEGAL, ex.getLocalizedMessage()),
+                HTTP_UNAUTHORIZED
+        );
+    }
+
+    /**
+     * Method for handling illegal argument JWT exception
+     *
+     * @param ex {@link IllegalArgumentException} the trowed exception
+     * @return {@link ResponseEntity} with {@link ErrorDetails} as body and {@link HttpStatus} http status
+     */
+    @ExceptionHandler(IllegalArgumentException.class)
+    protected ResponseEntity<Object> handleIllegalArgumentException(final IllegalArgumentException ex) {
+        Objects.requireNonNull(ex, EXCEPTION_NULL);
+
+        return new ResponseEntity<>(new ErrorDetails(new Date().toString(), TOKEN_ILLEGAL, ex.getLocalizedMessage()),
+                HTTP_UNAUTHORIZED
+        );
+    }
+
+    /**
      * Method for default exception handling
      *
      * @param ex       {@link MethodArgumentNotValidException} the thrown exception
@@ -90,6 +181,8 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
     public ResponseEntity<Object> defaultExceptionHandle(final Exception ex,
                                                          final HttpServletRequest request,
                                                          final HttpServletResponse response) {
+        Objects.requireNonNull(ex, EXCEPTION_NULL);
+
         if (ex instanceof NullPointerException) {
             new ResponseEntity(REQUEST_PARAM_NULL, HTTP_INTERNAL_ERROR);
         }

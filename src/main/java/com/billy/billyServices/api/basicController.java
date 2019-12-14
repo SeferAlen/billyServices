@@ -14,6 +14,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.UnsupportedJwtException;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.SignatureException;
+import io.jsonwebtoken.InvalidClaimException;
+import java.lang.IllegalArgumentException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +29,9 @@ import java.util.List;
 public abstract class basicController {
     protected static final HttpStatus HTTP_OK = HttpStatus.OK;
     protected static final HttpStatus HTTP_CREATED = HttpStatus.CREATED;
+    protected static final HttpStatus HTTP_NO_CONTENT = HttpStatus.NO_CONTENT;
     protected static final HttpStatus HTTP_ACCEPTED = HttpStatus.ACCEPTED;
+    protected static final HttpStatus HTTP_FORBIDDEN = HttpStatus.FORBIDDEN;
     protected static final HttpStatus HTTP_BAD_REQUEST = HttpStatus.BAD_REQUEST;
     protected static final HttpStatus HTTP_UNAUTHORIZED = HttpStatus.UNAUTHORIZED;
     protected static final HttpStatus HTTP_INTERNAL_ERROR = HttpStatus.INTERNAL_SERVER_ERROR;
@@ -55,7 +63,7 @@ public abstract class basicController {
     @Autowired
     private AuthorizationService authorizationService;
 
-    private final Logger logger = LoggerFactory.getLogger(loginController.class);
+    private final Logger logger = LoggerFactory.getLogger(basicController.class);
 
     /**
      * Method for authorization across controllers
@@ -89,6 +97,9 @@ public abstract class basicController {
             }
         } catch (final Exception e) {
             logger.error(e.getLocalizedMessage());
+
+            if (e instanceof ExpiredJwtException || e instanceof UnsupportedJwtException || e instanceof MalformedJwtException ||
+                e instanceof SignatureException || e instanceof InvalidClaimException || e instanceof IllegalArgumentException) throw e;
 
             return new AuthorizationResult(new ResponseEntity<>(SERVER_ERROR_RESPONSE, HTTP_INTERNAL_ERROR),
                     STATUS_UNAUTHORIZED);

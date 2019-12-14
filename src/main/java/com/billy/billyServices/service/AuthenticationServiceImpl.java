@@ -24,7 +24,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private static final AuthenticationStatus STATUS_OK = AuthenticationStatus.OK;
     private static final AuthenticationStatus STATUS_FAILED = AuthenticationStatus.FAILED;
     private static final String NO_TOKEN = "";
-    private static final String LOGIN_NULL = "Login must not be null";
+    private static final String LOGIN_NULL = "login must not be null";
 
     @Autowired
     private LoginRepository loginRepository;
