@@ -63,7 +63,8 @@ public class billController extends basicController {
      * @param uuid     {@link UUID}   the bill id
      * @return {@link ResponseEntity} the response entity with body containing {@link Bill} (if request is valid) and Http status
      */
-    @GetMapping(value = "/{username}/{id}", produces = "application/json")
+    @CrossOrigin
+    @GetMapping(value = "/{username}/{id}", consumes = "application/json", produces = "application/json")
     public ResponseEntity<?> getBill(@RequestHeader("Authorization") final String auth,
                                      @PathVariable("username") final String username,
                                      @PathVariable("id") final UUID uuid) {
@@ -100,9 +101,10 @@ public class billController extends basicController {
      * @param username {@link String} the username
      * @return {@link ResponseEntity} the response entity with body containing {@link ArrayList<Bill>} (if request is valid) and Http status
      */
-    @GetMapping(value = "/{username}", produces = "application/json")
-    public ResponseEntity<?> getBills(@RequestHeader("Authorization") final String auth,
-                                      @PathVariable("username") final String username) {
+    @CrossOrigin
+    @GetMapping(value = "/username/{username}", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<?> getBillsByUsername(@RequestHeader("Authorization") final String auth,
+                                                @PathVariable("username") final String username) {
 
         final AuthorizationResult authorizationResult = authorize(auth, ALL_ROLES);
 
@@ -122,6 +124,40 @@ public class billController extends basicController {
                 }
             } else {
                 return new ResponseEntity<>(String.format(UNAUTHORIZED, username), HTTP_UNAUTHORIZED);
+            }
+        } else {
+            return authorizationResult.getResponseEntity();
+        }
+    }
+
+    /**
+     * Get all user bills endpoint
+     *
+     * @param uuid {@link UUID} the user id
+     * @return {@link ResponseEntity} the response entity with body containing {@link ArrayList<Bill>} (if request is valid) and Http status
+     */
+    @CrossOrigin
+    @GetMapping(value = "/uuid/{uuid}", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<?> getBillsById(@RequestHeader("Authorization") final String auth,
+                                          @PathVariable("uuid") final UUID uuid) {
+
+        final AuthorizationResult authorizationResult = authorize(auth, ONLY_ADMIN_ROLE);
+
+        if (authorizationResult.getAuthorizationStatus() == STATUS_AUTHORIZED) {
+
+            final GetBillsResult result = billService.getBills(uuid);
+
+            switch (result.getStatus()) {
+                case USERNAME_NO_EXIST:
+                    return new ResponseEntity<>(USERNAME_NO_EXIST, HTTP_BAD_REQUEST);
+                case OK: {
+                    if (result.getBills().isEmpty()) return new ResponseEntity<>(EMPTY_STRING, HTTP_NO_CONTENT);
+                    else return new ResponseEntity<>(result.getBills(), HTTP_OK);
+                }
+                case FAILED:
+                    return new ResponseEntity<>(SERVER_ERROR_RESPONSE, HTTP_INTERNAL_ERROR);
+                default:
+                    return new ResponseEntity<>(SERVER_ERROR_RESPONSE, HTTP_INTERNAL_ERROR);
             }
         } else {
             return authorizationResult.getResponseEntity();

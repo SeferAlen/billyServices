@@ -2,6 +2,7 @@ package com.billy.billyServices.api;
 
 import com.billy.billyServices.model.AuthenticationResult;
 import com.billy.billyServices.model.Login;
+import com.billy.billyServices.model.Token;
 import com.billy.billyServices.service.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -40,7 +41,7 @@ public class loginController extends basicController {
         switch (authenticationResult.getStatus()) {
             case USER_NOT_FOUND: return new ResponseEntity<>(USER_NOT_FOUND, HTTP_BAD_REQUEST);
             case WRONG_PASSWORD: return new ResponseEntity<>(WRONG_PASSWORD, HTTP_UNAUTHORIZED);
-            case OK: return new ResponseEntity<>(authenticationResult.getToken(), HTTP_OK);
+            case OK: return new ResponseEntity<>(new Token(authenticationResult.getToken()), HTTP_OK);
             default: return new ResponseEntity<>(SERVER_ERROR_RESPONSE, HTTP_INTERNAL_ERROR);
         }
     }

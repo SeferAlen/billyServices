@@ -116,4 +116,36 @@ public class BillServiceImpl implements BillService{
             return new GetBillsResult(STATUS_BILLS_FAILED);
         }
     }
+
+    /**
+     * Method for getting all bills from user
+     *
+     * @param uuid {@link UUID} the user id
+     * @return {@link GetBillsResult} the object containing {@link ArrayList<BillResponse>} if request valid and {@link GetBillsStatus}
+     */
+    public GetBillsResult getBills(final UUID uuid) {
+        Objects.requireNonNull(uuid, UUID_NULL);
+
+        try {
+            final Optional<BillyUser> billyUser = userRepository.findById(uuid);
+            if (billyUser.get() != null) {
+                final Login login = loginRepository.findByBillyUser(billyUser.get());
+                if (login == null) return new GetBillsResult(STATUS_NO_USERNAME);
+                final UUID userID = login.getBillyUser().getBilly_userID();
+
+                final List<Bill> bills = billRepository.findAll().stream()
+                        .filter(
+                                bill -> bill.getOwner().getBilly_userID().equals(userID)
+                        ).collect(Collectors.toList());
+
+                return new GetBillsResult(new ArrayList<>(ConverterUtil.fromBillToBillResponse(bills)), STATUS_BILLS_OK);
+            } else {
+                return new GetBillsResult(STATUS_BILLS_FAILED);
+            }
+        } catch (final Exception e) {
+            logger.error(e.getLocalizedMessage());
+
+            return new GetBillsResult(STATUS_BILLS_FAILED);
+        }
+    }
 }

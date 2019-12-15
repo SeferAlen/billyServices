@@ -14,4 +14,5 @@ public interface BillService {
     BillCreateStatus create(final Bill bill, final String username);
     GetBillsResult getBill(final UUID uuid);
     GetBillsResult getBills(final String username);
+    GetBillsResult getBills(final UUID uuid);
 }

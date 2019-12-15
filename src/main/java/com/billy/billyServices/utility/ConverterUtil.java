@@ -8,6 +8,7 @@ import com.billy.billyServices.model.BillyUserResponse;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Utility methods for converting between types
@@ -37,17 +38,21 @@ public class ConverterUtil {
      * @param users {@link List<BillyUser>} the users
      * @return {@link List<BillyUser>} the users converted to {@link BillResponse}
      */
-    public static List<BillyUserResponse> fromBillyUserToBillyUserResponse(final List<BillyUser> users) {
+    public static List<BillyUserResponse> fromBillyUserToBillyUserResponse(final List<BillyUser> users, final UUID adminUUID) {
 
         final List<BillyUserResponse> billyUserResponses = new ArrayList<>();
         for (final BillyUser user: users) {
-            billyUserResponses.add(new BillyUserResponse(
-                    user.getBilly_userID(),
-                    user.getFirst_name(),
-                    user.getLast_name(),
-                    user.getAddress(),
-                    user.getPhone())
-            );
+            if (!user.getBilly_userID().equals(adminUUID)) {
+                billyUserResponses.add(new BillyUserResponse(
+                        user.getBilly_userID(),
+                        user.getFirst_name(),
+                        user.getLast_name(),
+                        user.getAddress(),
+                        user.getPhone())
+                );
+            } else {
+                // skip Admin
+            }
         }
 
         return billyUserResponses;

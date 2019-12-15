@@ -18,11 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.ArrayList;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Service for users and user related actions
@@ -123,10 +119,12 @@ public class UserServiceImpl implements UserService {
 
         try {
             final List<BillyUser> users = userRepository.findAll();
+            final Login adminLogin = loginRepository.findByUsername(ROLE_ADMIN);
+            final UUID adminUUID = adminLogin.getBillyUser().getBilly_userID();
 
             if (users.isEmpty()) return new GetUsersResult(NO_USERS);
             else {
-                return new GetUsersResult(ConverterUtil.fromBillyUserToBillyUserResponse(users), GET_USERS_STATUS_OK);
+                return new GetUsersResult(ConverterUtil.fromBillyUserToBillyUserResponse(users, adminUUID), GET_USERS_STATUS_OK);
             }
         } catch (final Exception e) {
             logger.error(e.getLocalizedMessage());

@@ -50,6 +50,7 @@ public class userController extends basicController {
      * @param auth {@link String} the Authorization header
      * @return {@link ResponseEntity} the response entity with body containing users and Http status
      */
+    @CrossOrigin
     @GetMapping(value = "", consumes = "application/json", produces = "application/json")
     public ResponseEntity<?> getUsers(@RequestHeader("Authorization") final String auth) {
 
@@ -96,6 +97,7 @@ public class userController extends basicController {
      * @param newPassword {@link NewPassword} the newPassword
      * @return {@link ResponseEntity} the response entity with body containing message and Http status
      */
+    @CrossOrigin
     @PostMapping(value = "/password", consumes = "application/json", produces = "application/json")
     public ResponseEntity<?> changePassword(@RequestHeader("Authorization") final String auth,
                                             @Valid@RequestBody final NewPassword newPassword) {
@@ -108,10 +110,10 @@ public class userController extends basicController {
                     newPassword.getPassword());
 
             switch (passwordChangeStatus) {
-                case SAME_PASSWORD: return new ResponseEntity<>(PASSWORD_SAME, HTTP_OK);
-                case CHANGED: return new ResponseEntity<>(PASSWORD_CHANGED, HTTP_OK);
-                case FAILED: return new ResponseEntity<>(PASSWORD_CHANGE_FAILED_RESPONSE, HTTP_BAD_REQUEST);
-                default: return new ResponseEntity<>(SERVER_ERROR_RESPONSE, HTTP_INTERNAL_ERROR);
+                case SAME_PASSWORD: return new ResponseEntity<>(new NewPasswordResponse(PASSWORD_SAME), HTTP_ACCEPTED);
+                case CHANGED: return new ResponseEntity<>(new NewPasswordResponse(PASSWORD_CHANGED), HTTP_OK);
+                case FAILED: return new ResponseEntity<>(new NewPasswordResponse(SERVER_ERROR_RESPONSE), HTTP_BAD_REQUEST);
+                default: return new ResponseEntity<>(new NewPasswordResponse(SERVER_ERROR_RESPONSE), HTTP_INTERNAL_ERROR);
             }
         } else {
             return authorizationResult.getResponseEntity();
