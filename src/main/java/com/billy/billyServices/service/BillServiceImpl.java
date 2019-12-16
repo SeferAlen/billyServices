@@ -2,7 +2,11 @@ package com.billy.billyServices.service;
 
 import com.billy.billyServices.enums.BillCreateStatus;
 import com.billy.billyServices.enums.GetBillsStatus;
-import com.billy.billyServices.model.*;
+import com.billy.billyServices.model.Bill;
+import com.billy.billyServices.model.BillyUser;
+import com.billy.billyServices.model.BillResponse;
+import com.billy.billyServices.model.GetBillsResult;
+import com.billy.billyServices.model.Login;
 import com.billy.billyServices.repository.BillRepository;
 import com.billy.billyServices.repository.LoginRepository;
 import com.billy.billyServices.repository.UserRepository;
@@ -12,7 +16,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -128,7 +136,9 @@ public class BillServiceImpl implements BillService{
 
         try {
             final Optional<BillyUser> billyUser = userRepository.findById(uuid);
+
             if (billyUser.get() != null) {
+
                 final Login login = loginRepository.findByBillyUser(billyUser.get());
                 if (login == null) return new GetBillsResult(STATUS_NO_USERNAME);
                 final UUID userID = login.getBillyUser().getBilly_userID();

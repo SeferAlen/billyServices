@@ -6,10 +6,13 @@ import com.billy.billyServices.model.Token;
 import com.billy.billyServices.service.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import javax.validation.Valid;
-
 
 /**
  * REST controller for user login
@@ -19,9 +22,6 @@ import javax.validation.Valid;
 public class loginController extends basicController {
     private static final String USER_NOT_FOUND = "User not found";
     private static final String WRONG_PASSWORD = "Wrong password";
-    private static final String USERNAME = "username";
-    private static final String PASSWORD = "password";
-    private static final String LOGGING = "User logging: ";
 
     @Autowired
     private AuthenticationService authenticationService;

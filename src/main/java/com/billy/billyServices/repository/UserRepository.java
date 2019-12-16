@@ -1,6 +1,5 @@
 package com.billy.billyServices.repository;
 
-import com.billy.billyServices.model.Bill;
 import com.billy.billyServices.model.BillyUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 

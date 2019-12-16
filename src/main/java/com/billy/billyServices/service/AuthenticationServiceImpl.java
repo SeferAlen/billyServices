@@ -31,7 +31,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    private final Logger logger = LoggerFactory.getLogger(loginController.class);
+    private final Logger logger = LoggerFactory.getLogger(AuthenticationService.class);
 
     /**
      * Method for generating Jwt

@@ -1,8 +1,10 @@
 package com.billy.billyServices.exceptions;
 
-import io.jsonwebtoken.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.InvalidClaimException;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.SignatureException;
+import io.jsonwebtoken.UnsupportedJwtException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,8 +19,6 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.constraints.Null;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -36,17 +36,16 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
     private static final HttpStatus HTTP_INTERNAL_ERROR = HttpStatus.INTERNAL_SERVER_ERROR;
     private static final String DATE_FORMAT = "yyyy-MM-dd hh:mm:ss";
     private static final String EXCEPTION_NULL = "exception must not be null";
-    private static final String EXCEPTION_UNEXPECTED = "Unexpected exception or error";
     private static final String VALIDATION_FAILED = "Validation failed";
     private static final String TOKEN_EXPIRED = "Token expired";
     private static final String TOKEN_UNSUPPORTED = "Unsupported token";
     private static final String TOKEN_MALFORMED = "Malformed token";
     private static final String TOKEN_SIGNATURE_INVALID = "Token signature not valid";
     private static final String TOKEN_ILLEGAL = "Illegal token";
-    private static final String WRONG_PASSWORD = "Wrong password";
     private static final String REQUEST_PARAM_NULL = "Request parameter is null";
-    private static final String SERVICE_ERROR_MESSAGE = "Service error";
     private static final String SERVICE_ERROR_DETAILS = "Please contact us with about this";
+    private static final String DOUBLE_DOT = ": ";
+    private static final String COMA_SEPERATED = ", ";
 
     /**
      * Method for handling validation exception
@@ -66,15 +65,15 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
         final Date now = new Date();
         final String nowFormatted = new SimpleDateFormat(DATE_FORMAT).format(now);
 
-        final List<String> errors = new ArrayList<String>();
+        final List<String> errors = new ArrayList<>();
         for (final FieldError error : ex.getBindingResult().getFieldErrors()) {
-            errors.add(error.getField() + ": " + error.getDefaultMessage());
+            errors.add(error.getField() + DOUBLE_DOT + error.getDefaultMessage());
         }
         for (final ObjectError error : ex.getBindingResult().getGlobalErrors()) {
-            errors.add(error.getObjectName() + ": " + error.getDefaultMessage());
+            errors.add(error.getObjectName() + DOUBLE_DOT + error.getDefaultMessage());
         }
 
-        final String listString = String.join(", ", errors);
+        final String listString = String.join(COMA_SEPERATED, errors);
 
         return new ResponseEntity<>(new ErrorDetails(nowFormatted, VALIDATION_FAILED, listString), HTTP_BAD_REQUEST);
     }

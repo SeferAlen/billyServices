@@ -4,13 +4,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.GenerationType;
 import javax.persistence.Column;
-import javax.persistence.OneToOne;
 import javax.persistence.ManyToMany;
 import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Set;
@@ -34,13 +30,26 @@ public class Role implements Serializable {
             mappedBy = "roles")
     private Set<Login> logins;
 
+    /**
+     * Instantiates a new Role.
+     */
     public Role() {
     }
 
+    /**
+     * Instantiates a new Role.
+     *
+     * @param name the name
+     */
     public Role(@NotNull String name) {
         this.name = name;
     }
 
+    /**
+     * Gets name.
+     *
+     * @return the name
+     */
     public String getName() {
         return name;
     }

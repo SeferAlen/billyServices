@@ -1,28 +1,27 @@
 package com.billy.billyServices.api;
 
-import com.billy.billyServices.enums.GetUsersStatus;
+import com.billy.billyServices.model.AuthorizationResult;
+import com.billy.billyServices.model.GetUsersResult;
+import com.billy.billyServices.model.Register;
+import com.billy.billyServices.model.NewPassword;
+import com.billy.billyServices.model.NewPasswordResponse;
 import com.billy.billyServices.enums.PasswordChangeStatus;
-import com.billy.billyServices.enums.TokenStatus;
 import com.billy.billyServices.enums.UserCreateStatus;
-import com.billy.billyServices.model.*;
 import com.billy.billyServices.service.UserService;
 import com.billy.billyServices.utility.JwtUtil;
-import com.billy.billyServices.utility.PatternUtil;
-import com.fasterxml.jackson.databind.ser.PropertyFilter;
-import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
-import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.json.MappingJacksonValue;
-import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
 
 /**
  * REST controller for user CRUD actions
@@ -32,12 +31,9 @@ import java.util.List;
 public class userController extends basicController {
     private static final String ALREADY_EXIST_RESPONSE = "Username already exist";
     private static final String USER_CREATE_FAILED_RESPONSE = "User creation failed";
-    private static final String PASSWORD_CHANGE_FAILED_RESPONSE = "User creation failed";
     private static final String CREATED_RESPONSE = "User created";
     private static final String PASSWORD_CHANGED = "Password changed";
     private static final String PASSWORD_SAME = "Password is same as old password";
-    private static final PasswordChangeStatus PASSWORD_CHANGE_FAILED_STATUS = PasswordChangeStatus.FAILED;
-    private static final PasswordChangeStatus PASSWORD_CHANGED_STATUS = PasswordChangeStatus.CHANGED;
 
     @Autowired
     private UserService userService;
@@ -105,6 +101,7 @@ public class userController extends basicController {
         final AuthorizationResult authorizationResult = authorize(auth, ALL_ROLES);
 
         if (authorizationResult.getAuthorizationStatus() == STATUS_AUTHORIZED) {
+
             final String token = auth.substring(auth.indexOf(EMPTY_SPACE));
             final PasswordChangeStatus passwordChangeStatus = userService.changePassword(JwtUtil.getUsernameFromToken(token),
                     newPassword.getPassword());

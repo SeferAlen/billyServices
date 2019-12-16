@@ -13,8 +13,6 @@ import org.springframework.context.event.EventListener;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -50,7 +48,7 @@ public class DBListener {
     }
 
     /**
-     * Method for seeding database table at application start
+     * Method for seeding database Role table at application start
      */
     private void seedRoleTable() {
         final List<Role> roles = roleRepository.findAll();

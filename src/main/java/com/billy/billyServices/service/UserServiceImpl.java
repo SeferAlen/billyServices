@@ -1,6 +1,5 @@
 package com.billy.billyServices.service;
 
-import com.billy.billyServices.api.loginController;
 import com.billy.billyServices.enums.GetUsersStatus;
 import com.billy.billyServices.enums.PasswordChangeStatus;
 import com.billy.billyServices.enums.UserCreateStatus;
@@ -18,7 +17,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Objects;
+import java.util.Set;
+import java.util.UUID;
 
 /**
  * Service for users and user related actions
@@ -157,7 +161,6 @@ public class UserServiceImpl implements UserService {
                 login.setRoles(loginRoles);
 
                 loginRepository.save(login);
-
                 logger.info(role.getName() + CREATED);
 
                 return STATUS_CREATED;

@@ -1,7 +1,6 @@
 package com.billy.billyServices.utility;
 
 import com.billy.billyServices.enums.TokenStatus;
-import com.billy.billyServices.model.BillyUser;
 import com.billy.billyServices.model.Login;
 import com.billy.billyServices.model.Role;
 import io.jsonwebtoken.Claims;
@@ -12,8 +11,13 @@ import org.springframework.stereotype.Component;
 
 import javax.xml.bind.DatatypeConverter;
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import java.util.function.Function;
 
 /**
@@ -24,10 +28,7 @@ public class JwtUtil implements Serializable {
     private static final String TOKEN_NULL = "Token must not be null";
     private static final String CLAIMS_RESOLVER_NULL = "Claims resolver function must not be null";
     private static final String LOGIN_NULL = "Login must not be null";
-    private static final String PRO_TIP_USER_NULL = "ProTipUser must not be null";
     private static final String CLAIM_ROLE = "Role";
-    private static final String CLAIM_VALIDITY_DATE = "ProTipUserValidityDate";
-    private static final String DATE_FORMAT = "yyyy-MM-dd";
     private static final int TOKEN_EXPIRATION = 5000;
     private static final long serialVersionUID = -2550185165626007488L;
     private static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60;
@@ -60,19 +61,6 @@ public class JwtUtil implements Serializable {
         claims.put(CLAIM_ROLE, roles);
 
         return doGenerateToken(claims, login.getUsername());
-    }
-
-    /**
-     * Method for token generation
-     *
-     * @param claims {@link Map<String, Object>} the claims
-     * @param subject {@link String}             the token
-     * @return {@link String}                    the token with claims
-     */
-    private static String doGenerateToken(final Map<String, Object> claims, final String subject) {
-        return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY * TOKEN_EXPIRATION))
-                .signWith(SignatureAlgorithm.HS512, jwtSecret).compact();
     }
 
     /**
@@ -170,6 +158,19 @@ public class JwtUtil implements Serializable {
         return TokenStatus.OK;
     }
 
+    /**
+     * Method for token generation
+     *
+     * @param claims {@link Map<String, Object>} the claims
+     * @param subject {@link String}             the token
+     * @return {@link String}                    the token with claims
+     */
+    private static String doGenerateToken(final Map<String, Object> claims, final String subject) {
+
+        return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY * TOKEN_EXPIRATION))
+                .signWith(SignatureAlgorithm.HS512, jwtSecret).compact();
+    }
 
     /**
      * Method for checking is token expired

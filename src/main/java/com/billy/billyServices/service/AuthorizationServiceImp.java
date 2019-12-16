@@ -7,6 +7,8 @@ import com.billy.billyServices.model.Role;
 import com.billy.billyServices.repository.RoleRepository;
 import com.billy.billyServices.utility.JwtUtil;
 import com.billy.billyServices.utility.PatternUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,19 +23,20 @@ import java.util.Objects;
  */
 @Service
 public class AuthorizationServiceImp implements AuthorizationService {
+    private static final HttpStatus HTTP_UNAUTHORIZED = HttpStatus.UNAUTHORIZED;
+    private static final TokenStatus INVALID_FORMAT_STATUS = TokenStatus.INVALID_FORMAT;
+    private static final AuthorizationStatus STATUS_AUTHORIZED = AuthorizationStatus.AUTHORIZED;
+    private static final AuthorizationStatus STATUS_UNAUTHORIZED = AuthorizationStatus.UNAUTHORIZED;
     private static final String UNAUTHORIZED = "Unauthorized";
     private static final String AUTH_NULL = "auth must not be null";
     private static final String TOKEN_NULL = "token must not be null";
     private static final String ROLE_LIST_NULL = "requiredRoleName must not be null";
-    protected static final String EMPTY_SPACE = " ";
-    protected static final HttpStatus HTTP_UNAUTHORIZED = HttpStatus.UNAUTHORIZED;
-    protected static final HttpStatus HTTP_BAD_REQUEST = HttpStatus.BAD_REQUEST;
-    private static final TokenStatus INVALID_FORMAT_STATUS = TokenStatus.INVALID_FORMAT;
-    protected static final AuthorizationStatus STATUS_AUTHORIZED = AuthorizationStatus.AUTHORIZED;
-    protected static final AuthorizationStatus STATUS_UNAUTHORIZED = AuthorizationStatus.UNAUTHORIZED;
+    private static final String EMPTY_SPACE = " ";
 
     @Autowired
     private RoleRepository roleRepository;
+
+    private final Logger logger = LoggerFactory.getLogger(AuthorizationService.class);
 
     /**
      * Method for check Jwt validity
@@ -62,18 +65,25 @@ public class AuthorizationServiceImp implements AuthorizationService {
         Objects.requireNonNull(token, TOKEN_NULL);
         Objects.requireNonNull(requiredRoleNames, ROLE_LIST_NULL);
 
-        final String userRoleName = JwtUtil.getRoleFromToken(token);
-        final Role userRole = roleRepository.findByName(userRoleName);
+        try {
+            final String userRoleName = JwtUtil.getRoleFromToken(token);
+            final Role userRole = roleRepository.findByName(userRoleName);
 
-        final List<Role> allowedRoles = new ArrayList<>();
-        for (final String roleName : requiredRoleNames) {
-            final Role role = roleRepository.findByName(roleName);
+            final List<Role> allowedRoles = new ArrayList<>();
+            for (final String roleName : requiredRoleNames) {
+                final Role role = roleRepository.findByName(roleName);
 
-            allowedRoles.add(role);
+                allowedRoles.add(role);
+            }
+
+            if (allowedRoles.contains(userRole)) return new AuthorizationResult(null, STATUS_AUTHORIZED);
+            else
+                return new AuthorizationResult(new ResponseEntity<>(UNAUTHORIZED, HTTP_UNAUTHORIZED), STATUS_UNAUTHORIZED);
+        } catch (final Exception e) {
+            logger.error(e.getLocalizedMessage());
+
+            return new AuthorizationResult(new ResponseEntity<>(UNAUTHORIZED, HTTP_UNAUTHORIZED), STATUS_UNAUTHORIZED);
         }
-
-        if (allowedRoles.contains(userRole)) return new AuthorizationResult(null, STATUS_AUTHORIZED);
-        else return new AuthorizationResult(new ResponseEntity<>(UNAUTHORIZED, HTTP_UNAUTHORIZED), STATUS_UNAUTHORIZED);
     }
 
     /**
@@ -85,8 +95,15 @@ public class AuthorizationServiceImp implements AuthorizationService {
     public Role getRole(final String auth) {
         Objects.requireNonNull(auth, AUTH_NULL);
 
-        final String token = auth.substring(auth.indexOf(EMPTY_SPACE));
-        return roleRepository.findByName(JwtUtil.getRoleFromToken(token));
+        try {
+            final String token = auth.substring(auth.indexOf(EMPTY_SPACE));
+            final String roleName = JwtUtil.getRoleFromToken(token);
+            return roleRepository.findByName(roleName);
+        } catch (final Exception e) {
+            logger.error(e.getLocalizedMessage());
+
+            throw e;
+        }
     }
 
     /**

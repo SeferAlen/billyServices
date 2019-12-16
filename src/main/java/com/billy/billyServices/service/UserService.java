@@ -6,8 +6,6 @@ import com.billy.billyServices.model.BillyUser;
 import com.billy.billyServices.model.GetUsersResult;
 import com.billy.billyServices.model.Login;
 
-import java.util.List;
-
 public interface UserService {
 
     UserCreateStatus createUser(final BillyUser billyUser, final Login login);
