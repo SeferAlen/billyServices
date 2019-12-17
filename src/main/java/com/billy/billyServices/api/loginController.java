@@ -32,7 +32,7 @@ public class loginController extends basicController {
      * @param login {@link Login} the login data
      * @return {@link ResponseEntity} the response entity with body containing token (if request is valid) and Http status
      */
-    @CrossOrigin("https://billyangular.herokuapp.com")
+    @CrossOrigin(origins = "https://billyangular.herokuapp.com")
     @PostMapping(value = "", consumes = "application/json", produces = "application/json")
     public ResponseEntity<?> login(@RequestBody@Valid final Login login) {
 
