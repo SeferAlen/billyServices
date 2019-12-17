@@ -77,6 +77,15 @@ public class BillyUser implements Serializable {
     }
 
     /**
+     * Sets billy user id.
+     *
+     * @param billy_userID the billy user id
+     */
+    public void setBilly_userID(UUID billy_userID) {
+        this.billy_userID = billy_userID;
+    }
+
+    /**
      * Gets first name.
      *
      * @return the first name
