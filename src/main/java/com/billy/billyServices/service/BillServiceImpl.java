@@ -89,7 +89,7 @@ public class BillServiceImpl implements BillService{
             else {
                 List<Bill> oneBillList = new ArrayList<>();
                 oneBillList.add(bill.get());
-                return new GetBillsResult(new ArrayList<>(ConverterUtil.fromBillToBillResponse(oneBillList)), STATUS_BILLS_OK);
+                return new GetBillsResult(new ArrayList<>(ConverterUtil.billUserResponse(oneBillList)), STATUS_BILLS_OK);
             }
         } catch (final Exception e) {
             logger.error(e.getLocalizedMessage());
@@ -117,7 +117,7 @@ public class BillServiceImpl implements BillService{
                                                                 bill -> bill.getOwner().getBilly_userID().equals(userID)
                                                              ).collect(Collectors.toList());
 
-            return new GetBillsResult(new ArrayList<>(ConverterUtil.fromBillToBillResponse(bills)), STATUS_BILLS_OK);
+            return new GetBillsResult(new ArrayList<>(ConverterUtil.billUserResponse(bills)), STATUS_BILLS_OK);
         } catch (final Exception e) {
             logger.error(e.getLocalizedMessage());
 
@@ -148,7 +148,7 @@ public class BillServiceImpl implements BillService{
                                 bill -> bill.getOwner().getBilly_userID().equals(userID)
                         ).collect(Collectors.toList());
 
-                return new GetBillsResult(new ArrayList<>(ConverterUtil.fromBillToBillResponse(bills)), STATUS_BILLS_OK);
+                return new GetBillsResult(new ArrayList<>(ConverterUtil.billUserResponse(bills)), STATUS_BILLS_OK);
             } else {
                 return new GetBillsResult(STATUS_BILLS_FAILED);
             }

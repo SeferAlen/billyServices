@@ -10,6 +10,12 @@ public class PatternUtil {
     private static final String BEARER_REGEX = "^Bearer:\\s\\w.+";
 
     /**
+     * Prevent instance creation
+     */
+    private PatternUtil() {
+    }
+
+    /**
      * Method to check Authorization header validity
      *
      * @param auth {@link String} the auth (Authorization header content)
