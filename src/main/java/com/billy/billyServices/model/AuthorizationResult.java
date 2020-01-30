@@ -12,14 +12,52 @@ public class AuthorizationResult {
     private AuthorizationStatus authorizationStatus;
 
     /**
-     * Instantiates a new Authorization result.
+     * Prevents instantiating a new Authorization result.
      *
-     * @param responseEntity      the response entity
-     * @param authorizationStatus the authorization status
      */
-    public AuthorizationResult(ResponseEntity<?> responseEntity, AuthorizationStatus authorizationStatus) {
-        this.responseEntity = responseEntity;
-        this.authorizationStatus = authorizationStatus;
+    private AuthorizationResult() {
+    }
+
+    /**
+     * Builder class for {@link AuthorizationResult}
+     */
+    public static class Builder {
+
+        private ResponseEntity<?> responseEntity;
+        private AuthorizationStatus authorizationStatus;
+
+
+        /**
+         * Instantiates a new Builder.
+         *
+         * @param authorizationStatus the authorization status
+         */
+        public Builder(AuthorizationStatus authorizationStatus) {
+            this.authorizationStatus = authorizationStatus;
+            this.responseEntity = null;
+        }
+
+        /**
+         * Add {@link ResponseEntity} to {@link AuthorizationResult}
+         *
+         */
+        public Builder withResponseEntity(final ResponseEntity<?> responseEntity) {
+            this.responseEntity = responseEntity;
+
+            return this;
+        }
+
+        /**
+         * Build instance of {@link AuthorizationResult}
+         *
+         */
+        public AuthorizationResult build() {
+            AuthorizationResult authorizationResult = new AuthorizationResult();
+            authorizationResult.authorizationStatus = this.authorizationStatus;
+            authorizationResult.responseEntity = this.responseEntity;
+
+            return authorizationResult;
+        }
     }
 
     /**

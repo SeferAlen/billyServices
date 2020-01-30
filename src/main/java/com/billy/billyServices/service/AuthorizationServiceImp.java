@@ -76,13 +76,18 @@ public class AuthorizationServiceImp implements AuthorizationService {
                 allowedRoles.add(role);
             }
 
-            if (allowedRoles.contains(userRole)) return new AuthorizationResult(null, STATUS_AUTHORIZED);
+            if (allowedRoles.contains(userRole)) return new AuthorizationResult.Builder(STATUS_AUTHORIZED)
+                    .build();
             else
-                return new AuthorizationResult(new ResponseEntity<>(UNAUTHORIZED, HTTP_UNAUTHORIZED), STATUS_UNAUTHORIZED);
+                return new AuthorizationResult.Builder(STATUS_UNAUTHORIZED)
+                        .withResponseEntity(new ResponseEntity<>(UNAUTHORIZED, HTTP_UNAUTHORIZED))
+                        .build();
         } catch (final Exception e) {
             logger.error(e.getLocalizedMessage());
 
-            return new AuthorizationResult(new ResponseEntity<>(UNAUTHORIZED, HTTP_UNAUTHORIZED), STATUS_UNAUTHORIZED);
+            return new AuthorizationResult.Builder(STATUS_UNAUTHORIZED)
+                    .withResponseEntity(new ResponseEntity<>(UNAUTHORIZED, HTTP_UNAUTHORIZED))
+                    .build();
         }
     }
 

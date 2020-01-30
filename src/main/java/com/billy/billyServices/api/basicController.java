@@ -38,16 +38,9 @@ public abstract class basicController {
     protected static final String TOKEN_EXPIRED = "Token expired";
     protected static final AuthorizationStatus STATUS_AUTHORIZED = AuthorizationStatus.AUTHORIZED;
     protected static final AuthorizationStatus STATUS_UNAUTHORIZED = AuthorizationStatus.UNAUTHORIZED;
-    protected static final List<String> ONLY_USER_ROLE = new ArrayList<>();
-    protected static final List<String> ONLY_ADMIN_ROLE = new ArrayList<>();
-    protected static final List<String> ALL_ROLES = new ArrayList<>();
-
-    public basicController() {
-        ONLY_USER_ROLE.add(ROLE_USER);
-        ONLY_ADMIN_ROLE.add(ROLE_ADMIN);
-        ALL_ROLES.add(ROLE_USER);
-        ALL_ROLES.add(ROLE_ADMIN);
-    }
+    protected static final List<String> ONLY_USER_ROLE = new ArrayList(){{add(ROLE_USER);}};
+    protected static final List<String> ONLY_ADMIN_ROLE = new ArrayList(){{add(ROLE_ADMIN);}};
+    protected static final List<String> ALL_ROLES = new ArrayList(){{add(ROLE_USER);add(ROLE_ADMIN);}};
 
     @Autowired
     private AuthorizationService authorizationService;
@@ -69,20 +62,23 @@ public abstract class basicController {
 
             switch (tokenStatus) {
                 case EXPIRED:
-                    return new AuthorizationResult(new ResponseEntity<>(TOKEN_EXPIRED, HTTP_BAD_REQUEST),
-                            STATUS_UNAUTHORIZED);
+                    return new AuthorizationResult.Builder(STATUS_UNAUTHORIZED)
+                            .withResponseEntity(new ResponseEntity<>(TOKEN_EXPIRED, HTTP_BAD_REQUEST))
+                            .build();
 
                 case INVALID_FORMAT:
-                    return new AuthorizationResult(new ResponseEntity<>(EMPTY_SPACE, HTTP_BAD_REQUEST),
-                            STATUS_UNAUTHORIZED);
+                    return new AuthorizationResult.Builder(STATUS_UNAUTHORIZED)
+                            .withResponseEntity(new ResponseEntity<>(EMPTY_SPACE, HTTP_BAD_REQUEST))
+                            .build();
 
                 case OK: {
                     final String token = auth.substring(auth.indexOf(EMPTY_SPACE));
                     return authorizationService.authorize(token, requiredRoleNames);
                 }
 
-                default: return new AuthorizationResult(new ResponseEntity<>(SERVER_ERROR_RESPONSE, HTTP_INTERNAL_ERROR),
-                        STATUS_UNAUTHORIZED);
+                default: return new AuthorizationResult.Builder(STATUS_UNAUTHORIZED)
+                        .withResponseEntity(new ResponseEntity<>(SERVER_ERROR_RESPONSE, HTTP_INTERNAL_ERROR))
+                        .build();
             }
         } catch (final Exception e) {
             logger.error(e.getLocalizedMessage());
@@ -90,8 +86,9 @@ public abstract class basicController {
             if (e instanceof ExpiredJwtException || e instanceof UnsupportedJwtException || e instanceof MalformedJwtException ||
                 e instanceof SignatureException || e instanceof InvalidClaimException || e instanceof IllegalArgumentException) throw e;
 
-            return new AuthorizationResult(new ResponseEntity<>(SERVER_ERROR_RESPONSE, HTTP_INTERNAL_ERROR),
-                    STATUS_UNAUTHORIZED);
+            return new AuthorizationResult.Builder(STATUS_UNAUTHORIZED)
+                    .withResponseEntity(new ResponseEntity<>(SERVER_ERROR_RESPONSE, HTTP_INTERNAL_ERROR))
+                    .build();
         }
     }
 }
