@@ -1,6 +1,7 @@
 package com.billy.billyServices.service;
 
 import com.billy.billyServices.api.loginController;
+import com.billy.billyServices.dao.LoginDb;
 import com.billy.billyServices.enums.AuthenticationStatus;
 import com.billy.billyServices.model.AuthenticationResult;
 import com.billy.billyServices.model.Login;
@@ -29,6 +30,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Autowired
     private LoginRepository loginRepository;
     @Autowired
+    private LoginDb loginDb;
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     private final Logger logger = LoggerFactory.getLogger(AuthenticationService.class);
@@ -44,13 +47,14 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         Objects.requireNonNull(login, LOGIN_NULL);
 
         try {
-            final Login dbLogin = loginRepository.findByUsername(login.getUsername());
+            final Login dbLoginJpaRepository = loginRepository.findByUsername(login.getUsername());
+            final Login dbLoginSQL = loginDb.findByUsername(login.getUsername());
 
-            if (dbLogin == null) return new AuthenticationResult(STATUS_NOT_FOUND, NO_TOKEN);
-            final boolean passwordCorrect = passwordEncoder.matches(login.getPassword(), dbLogin.getPassword());
+            if (dbLoginSQL == null) return new AuthenticationResult(STATUS_NOT_FOUND, NO_TOKEN);
+            final boolean passwordCorrect = passwordEncoder.matches(login.getPassword(), dbLoginSQL.getPassword());
             if (!passwordCorrect) return new AuthenticationResult(STATUS_WRONG_PASSWORD, NO_TOKEN);
 
-            return new AuthenticationResult(STATUS_OK, JwtUtil.generateToken(dbLogin));
+            return new AuthenticationResult(STATUS_OK, JwtUtil.generateToken(dbLoginSQL));
         } catch (final Exception e) {
             logger.error(e.getLocalizedMessage());
 
