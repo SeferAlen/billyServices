@@ -4,7 +4,6 @@ import com.billy.billyServices.model.BillyUser;
 import com.billy.billyServices.model.Login;
 import com.billy.billyServices.model.Role;
 import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -32,10 +31,10 @@ public class LoginDbImpl extends DbConnection implements LoginDb {
     private static final String USERNAME_NULL = "username must not be null";
 
     private static final String FIND_BY_USERNAME_QUERY =
-            "select l.loginid, l.username, l.password, b.billy_userid, b.address, b.first_name, b.last_name, b.phone from login l \n" +
-            "inner join billy_user b on l.billy_userid = b.billy_userid where l.username = ? ";
-    private static final String SELECT_ALL_ROLES = "Select r.roleid, r.name from role r inner join login_roles lr on \n" +
-            "lr.roleid = r.roleid inner join login l on l.loginid = lr.loginid where l.loginid = ? ";
+            "SELECT L.LOGINID, L.USERNAME, L.PASSWORD, B.BILLY_USERID, B.ADDRESS, B.FIRST_NAME, B.LAST_NAME, B.PHONE FROM LOGIN L \n" +
+            "INNER JOIN BILLY_USER B ON L.BILLY_USERID = B.BILLY_USERID WHERE L.USERNAME = ? ";
+    private static final String SELECT_ALL_ROLES = "SELECT R.ROLEID, R.NAME FROM ROLE R INNER JOIN LOGIN_ROLES LR ON \n" +
+            "LR.ROLEID = R.ROLEID INNER JOIN LOGIN L ON L.LOGINID = LR.LOGINID WHERE L.LOGINID = ? ";
 
     /**
      * Method for getting Login from username
@@ -56,14 +55,14 @@ public class LoginDbImpl extends DbConnection implements LoginDb {
             while (rs.next()) {
 
                  login = new Login(rs.getString(USERNAME_COLUMN),
-                                              rs.getString(PASSWORD_COLUMN),
-                                              new BillyUser(UUID.fromString(rs.getString(BILLY_USERID_COLUMN)),
-                                                            rs.getString(ADDRESS_COLUMN),
-                                                            rs.getString(FIRST_NAME_COLUMN),
-                                                            rs.getString(LAST_NAME_COLUMN),
-                                                            rs.getString(PHONE_COLUMN)
-                                              ),
-                                              getRoles(rs.getString(LOGIN_ID_COLUMN))
+                                   rs.getString(PASSWORD_COLUMN),
+                                   new BillyUser(UUID.fromString(rs.getString(BILLY_USERID_COLUMN)),
+                                           rs.getString(ADDRESS_COLUMN),
+                                           rs.getString(FIRST_NAME_COLUMN),
+                                           rs.getString(LAST_NAME_COLUMN),
+                                           rs.getString(PHONE_COLUMN)
+                                   ),
+                                   getRoles(rs.getString(LOGIN_ID_COLUMN))
                 );
             }
 
