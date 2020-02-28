@@ -76,6 +76,21 @@ public class Login implements Serializable {
     }
 
     /**
+     * Instantiates a new Login.
+     *
+     * @param username  the username
+     * @param password  the password
+     * @param billyUser the billy user
+     * @param roles     the roles
+     */
+    public Login(@NotNull String username, @NotNull @Size(min = 8, message = "Password must be at least 8 characters long") String password, BillyUser billyUser, Set<Role> roles) {
+        this.username = username;
+        this.password = password;
+        this.billyUser = billyUser;
+        this.roles = roles;
+    }
+
+    /**
      * Gets login id.
      *
      * @return the login id

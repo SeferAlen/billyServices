@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
  * Service for bills and bills related actions
  */
 @Service
-public class BillServiceImpl implements BillService{
+public class BillServiceImpl implements BillService {
     private static final BillCreateStatus STATUS_CREATED = BillCreateStatus.CREATED;
     private static final BillCreateStatus STATUS_FAILED = BillCreateStatus.FAILED;
     private static final GetBillsStatus STATUS_NO_USERNAME = GetBillsStatus.USERNAME_NO_EXIST;
@@ -137,7 +137,7 @@ public class BillServiceImpl implements BillService{
         try {
             final Optional<BillyUser> billyUser = userRepository.findById(uuid);
 
-            if (billyUser.get() != null) {
+            if (billyUser.isPresent()) {
 
                 final Login login = loginRepository.findByBillyUser(billyUser.get());
                 if (login == null) return new GetBillsResult(STATUS_NO_USERNAME);
