@@ -1,5 +1,7 @@
 package com.billy.billyServices.service;
 
+import com.billy.billyServices.config.AdminUUID;
+import com.billy.billyServices.dao.LoginDb;
 import com.billy.billyServices.enums.GetUsersStatus;
 import com.billy.billyServices.enums.PasswordChangeStatus;
 import com.billy.billyServices.enums.UserCreateStatus;
@@ -82,7 +84,10 @@ public class UserServiceImpl implements UserService {
         Objects.requireNonNull(billyUser, USER_NULL);
         Objects.requireNonNull(login, LOGIN_NULL);
 
-        return create(billyUser, login, roleRepository.findByName(ROLE_ADMIN));
+        final UserCreateStatus adminCreateStatus = create(billyUser, login, roleRepository.findByName(ROLE_ADMIN));
+        if (adminCreateStatus == STATUS_CREATED) saveAdminUUID();
+
+        return adminCreateStatus;
     }
 
     /**
@@ -128,7 +133,7 @@ public class UserServiceImpl implements UserService {
 
             if (users.isEmpty()) return new GetUsersResult(NO_USERS);
             else {
-                return new GetUsersResult(ConverterUtil.fromBillyUserToBillyUserResponse(users, adminUUID), GET_USERS_STATUS_OK);
+                return new GetUsersResult(ConverterUtil.billyUserResponse(users), GET_USERS_STATUS_OK);
             }
         } catch (final Exception e) {
             logger.error(e.getLocalizedMessage());
@@ -170,5 +175,16 @@ public class UserServiceImpl implements UserService {
 
             return STATUS_FAILED;
         }
+    }
+
+    /**
+     * Method to set admin UUID
+     *
+     */
+    private void saveAdminUUID() {
+
+        final AdminUUID adminUUID = AdminUUID.getInstance();
+        final Login adminLogin = loginRepository.findByUsername(ROLE_ADMIN);
+        adminUUID.setAdminUUID(adminLogin.getBillyUser().getBilly_userID());
     }
 }

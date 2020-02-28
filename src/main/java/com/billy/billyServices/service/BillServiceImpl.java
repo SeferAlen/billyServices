@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
  * Service for bills and bills related actions
  */
 @Service
-public class BillServiceImpl implements BillService{
+public class BillServiceImpl implements BillService {
     private static final BillCreateStatus STATUS_CREATED = BillCreateStatus.CREATED;
     private static final BillCreateStatus STATUS_FAILED = BillCreateStatus.FAILED;
     private static final GetBillsStatus STATUS_NO_USERNAME = GetBillsStatus.USERNAME_NO_EXIST;
@@ -89,7 +89,7 @@ public class BillServiceImpl implements BillService{
             else {
                 List<Bill> oneBillList = new ArrayList<>();
                 oneBillList.add(bill.get());
-                return new GetBillsResult(new ArrayList<>(ConverterUtil.fromBillToBillResponse(oneBillList)), STATUS_BILLS_OK);
+                return new GetBillsResult(new ArrayList<>(ConverterUtil.billUserResponse(oneBillList)), STATUS_BILLS_OK);
             }
         } catch (final Exception e) {
             logger.error(e.getLocalizedMessage());
@@ -117,7 +117,7 @@ public class BillServiceImpl implements BillService{
                                                                 bill -> bill.getOwner().getBilly_userID().equals(userID)
                                                              ).collect(Collectors.toList());
 
-            return new GetBillsResult(new ArrayList<>(ConverterUtil.fromBillToBillResponse(bills)), STATUS_BILLS_OK);
+            return new GetBillsResult(new ArrayList<>(ConverterUtil.billUserResponse(bills)), STATUS_BILLS_OK);
         } catch (final Exception e) {
             logger.error(e.getLocalizedMessage());
 
@@ -137,7 +137,7 @@ public class BillServiceImpl implements BillService{
         try {
             final Optional<BillyUser> billyUser = userRepository.findById(uuid);
 
-            if (billyUser.get() != null) {
+            if (billyUser.isPresent()) {
 
                 final Login login = loginRepository.findByBillyUser(billyUser.get());
                 if (login == null) return new GetBillsResult(STATUS_NO_USERNAME);
@@ -148,7 +148,7 @@ public class BillServiceImpl implements BillService{
                                 bill -> bill.getOwner().getBilly_userID().equals(userID)
                         ).collect(Collectors.toList());
 
-                return new GetBillsResult(new ArrayList<>(ConverterUtil.fromBillToBillResponse(bills)), STATUS_BILLS_OK);
+                return new GetBillsResult(new ArrayList<>(ConverterUtil.billUserResponse(bills)), STATUS_BILLS_OK);
             } else {
                 return new GetBillsResult(STATUS_BILLS_FAILED);
             }

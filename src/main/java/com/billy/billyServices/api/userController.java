@@ -46,7 +46,7 @@ public class userController extends basicController {
      * @param auth {@link String} the Authorization header
      * @return {@link ResponseEntity} the response entity with body containing users and Http status
      */
-    @CrossOrigin(origins = "https://billyangular.herokuapp.com")
+    @CrossOrigin()
     @GetMapping(value = "", consumes = "application/json", produces = "application/json")
     public ResponseEntity<?> getUsers(@RequestHeader("Authorization") final String auth) {
 
@@ -93,7 +93,7 @@ public class userController extends basicController {
      * @param newPassword {@link NewPassword} the newPassword
      * @return {@link ResponseEntity} the response entity with body containing message and Http status
      */
-    @CrossOrigin(origins = "https://billyangular.herokuapp.com")
+    @CrossOrigin()
     @PostMapping(value = "/password", consumes = "application/json", produces = "application/json")
     public ResponseEntity<?> changePassword(@RequestHeader("Authorization") final String auth,
                                             @Valid@RequestBody final NewPassword newPassword) {

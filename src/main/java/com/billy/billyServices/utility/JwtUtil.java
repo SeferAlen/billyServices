@@ -41,6 +41,12 @@ public class JwtUtil implements Serializable {
     }
 
     /**
+     * Prevent instance creation
+     */
+    private JwtUtil() {
+    }
+
+    /**
      * Method for generating token from login data
      *
      * @param login {@link Login} the login

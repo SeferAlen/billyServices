@@ -1,5 +1,6 @@
 package com.billy.billyServices.service;
 
+import com.billy.billyServices.dao.RoleDbImpl;
 import com.billy.billyServices.enums.AuthorizationStatus;
 import com.billy.billyServices.enums.TokenStatus;
 import com.billy.billyServices.model.AuthorizationResult;
@@ -35,6 +36,8 @@ public class AuthorizationServiceImp implements AuthorizationService {
 
     @Autowired
     private RoleRepository roleRepository;
+    @Autowired
+    private RoleDbImpl roleDb;
 
     private final Logger logger = LoggerFactory.getLogger(AuthorizationService.class);
 
@@ -67,22 +70,25 @@ public class AuthorizationServiceImp implements AuthorizationService {
 
         try {
             final String userRoleName = JwtUtil.getRoleFromToken(token);
-            final Role userRole = roleRepository.findByName(userRoleName);
+            final Role dbRoleJpaRepository = roleRepository.findByName(userRoleName);
+            final Role dbRoleSQL = roleDb.findByName(userRoleName);
 
-            final List<Role> allowedRoles = new ArrayList<>();
+            final List<String> allowedRoles = new ArrayList<>();
             for (final String roleName : requiredRoleNames) {
-                final Role role = roleRepository.findByName(roleName);
+                final Role role = roleDb.findByName(roleName);
 
-                allowedRoles.add(role);
+                allowedRoles.add(role.getName());
             }
 
-            if (allowedRoles.contains(userRole)) return new AuthorizationResult(null, STATUS_AUTHORIZED);
-            else
-                return new AuthorizationResult(new ResponseEntity<>(UNAUTHORIZED, HTTP_UNAUTHORIZED), STATUS_UNAUTHORIZED);
+            if (allowedRoles.contains(dbRoleJpaRepository.getName())) return new AuthorizationResult.Builder(STATUS_AUTHORIZED).build();
+            else return new AuthorizationResult.Builder(STATUS_UNAUTHORIZED).withResponseEntity(new ResponseEntity<>(UNAUTHORIZED, HTTP_UNAUTHORIZED))
+                        .build();
         } catch (final Exception e) {
             logger.error(e.getLocalizedMessage());
 
-            return new AuthorizationResult(new ResponseEntity<>(UNAUTHORIZED, HTTP_UNAUTHORIZED), STATUS_UNAUTHORIZED);
+            return new AuthorizationResult.Builder(STATUS_UNAUTHORIZED)
+                    .withResponseEntity(new ResponseEntity<>(UNAUTHORIZED, HTTP_UNAUTHORIZED))
+                    .build();
         }
     }
 

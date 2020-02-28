@@ -68,6 +68,23 @@ public class BillyUser implements Serializable {
     }
 
     /**
+     * Instantiates a new Billy user.
+     *
+     * @param billy_userID the billy user id
+     * @param first_name   the first name
+     * @param last_name    the last name
+     * @param address      the address
+     * @param phone        the phone
+     */
+    public BillyUser(UUID billy_userID, @NotNull String first_name, @NotNull String last_name, @NotNull String address, @NotNull String phone) {
+        this.billy_userID = billy_userID;
+        this.first_name = first_name;
+        this.last_name = last_name;
+        this.address = address;
+        this.phone = phone;
+    }
+
+    /**
      * Gets billy user id.
      *
      * @return the billy user id

@@ -72,7 +72,7 @@ public class billController extends basicController {
      * @param uuid     {@link UUID}   the bill id
      * @return {@link ResponseEntity} the response entity with body containing {@link Bill} (if request is valid) and Http status
      */
-    @CrossOrigin(origins = "https://billyangular.herokuapp.com")
+    @CrossOrigin()
     @GetMapping(value = "/{username}/{id}", consumes = "application/json", produces = "application/json")
     public ResponseEntity<?> getBill(@RequestHeader("Authorization") final String auth,
                                      @PathVariable("username") final String username,
@@ -110,7 +110,7 @@ public class billController extends basicController {
      * @param username {@link String} the username
      * @return {@link ResponseEntity} the response entity with body containing {@link ArrayList<Bill>} (if request is valid) and Http status
      */
-    @CrossOrigin(origins = "https://billyangular.herokuapp.com")
+    @CrossOrigin()
     @GetMapping(value = "/username/{username}", consumes = "application/json", produces = "application/json")
     public ResponseEntity<?> getBillsByUsername(@RequestHeader("Authorization") final String auth,
                                                 @PathVariable("username") final String username) {
@@ -145,7 +145,7 @@ public class billController extends basicController {
      * @param uuid {@link UUID} the user id
      * @return {@link ResponseEntity} the response entity with body containing {@link ArrayList<Bill>} (if request is valid) and Http status
      */
-    @CrossOrigin(origins = "https://billyangular.herokuapp.com")
+    @CrossOrigin()
     @GetMapping(value = "/uuid/{uuid}", consumes = "application/json", produces = "application/json")
     public ResponseEntity<?> getBillsById(@RequestHeader("Authorization") final String auth,
                                           @PathVariable("uuid") final UUID uuid) {
