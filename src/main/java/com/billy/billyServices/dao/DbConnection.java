@@ -7,7 +7,6 @@ import java.sql.PreparedStatement;
  * Abstract class containing shared values and method's for Db related actions
  */
 public abstract class DbConnection {
-    protected static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
     protected static final String DB_URL = "jdbc:postgresql://localhost:5432/postgres";
     protected static final String USER = "alen";
     protected static final String PASSWORD = "alen";

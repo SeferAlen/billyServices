@@ -8,6 +8,7 @@ import java.util.regex.Pattern;
  */
 public class PatternUtil {
     private static final String BEARER_REGEX = "^Bearer:\\s\\w.+";
+    private static final Pattern AUTH_HEADER_PATTERN = Pattern.compile(BEARER_REGEX);
 
     /**
      * Prevent instance creation
@@ -23,8 +24,7 @@ public class PatternUtil {
      */
     public static boolean authorizationHeaderValid(final String auth) {
 
-        final Pattern authHeaderPattern = Pattern.compile(BEARER_REGEX);
-        final Matcher matcher = authHeaderPattern.matcher(auth);
+        final Matcher matcher = AUTH_HEADER_PATTERN.matcher(auth);
         if (matcher.find()) return true;
         else return false;
     }

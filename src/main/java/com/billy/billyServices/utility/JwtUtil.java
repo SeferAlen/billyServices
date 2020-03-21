@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.xml.bind.DatatypeConverter;
-import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -24,14 +23,13 @@ import java.util.function.Function;
  * Utility methods for json web token related actions
  */
 @Component
-public class JwtUtil implements Serializable {
+public class JwtUtil {
     private static final String TOKEN_NULL = "Token must not be null";
     private static final String CLAIMS_RESOLVER_NULL = "Claims resolver function must not be null";
     private static final String LOGIN_NULL = "Login must not be null";
     private static final String CLAIM_ROLE = "Role";
     private static final String CUT = ", ";
     private static final int TOKEN_EXPIRATION = 5000;
-    private static final long serialVersionUID = -2550185165626007488L;
     private static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60;
 
     private static String jwtSecret;
@@ -134,7 +132,6 @@ public class JwtUtil implements Serializable {
         return claims.get(CLAIM_ROLE).toString();
     }
 
-
     /**
      * Method for decoding token
      *
@@ -189,5 +186,4 @@ public class JwtUtil implements Serializable {
         final Date expiration = getExpirationDateFromToken(token);
         return expiration.before(new Date());
     }
-
 }

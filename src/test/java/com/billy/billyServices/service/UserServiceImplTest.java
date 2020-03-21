@@ -119,7 +119,7 @@ public class UserServiceImplTest {
         Mockito.when(loginRepository.findByUsername(ROLE_ADMIN)).thenReturn(login1);
         Mockito.when(loginRepository.findAll()).thenReturn(logins);
 
-        Assert.assertEquals(2, userService.getUsers().getUsers().size());
+        Assert.assertEquals(3, userService.getUsers().getUsers().size());
 
         verify(userRepository, times(1)).findAll();
         verify(loginRepository, times(1)).findByUsername(ROLE_ADMIN);

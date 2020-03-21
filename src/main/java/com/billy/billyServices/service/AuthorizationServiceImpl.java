@@ -23,7 +23,7 @@ import java.util.Objects;
  * Service for users authorization and authorization related actions
  */
 @Service
-public class AuthorizationServiceImp implements AuthorizationService {
+public class AuthorizationServiceImpl implements AuthorizationService {
     private static final HttpStatus HTTP_UNAUTHORIZED = HttpStatus.UNAUTHORIZED;
     private static final TokenStatus INVALID_FORMAT_STATUS = TokenStatus.INVALID_FORMAT;
     private static final AuthorizationStatus STATUS_AUTHORIZED = AuthorizationStatus.AUTHORIZED;
