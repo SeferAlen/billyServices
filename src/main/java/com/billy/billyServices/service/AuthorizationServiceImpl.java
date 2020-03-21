@@ -71,7 +71,7 @@ public class AuthorizationServiceImpl implements AuthorizationService {
         try {
             final String userRoleName = JwtUtil.getRoleFromToken(token);
             final Role dbRoleJpaRepository = roleRepository.findByName(userRoleName);
-            final Role dbRoleSQL = roleDb.findByName(userRoleName);
+            // final Role dbRoleSQL = roleDb.findByName(userRoleName);
 
             final List<String> allowedRoles = new ArrayList<>();
             for (final String roleName : requiredRoleNames) {
