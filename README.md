@@ -2,7 +2,7 @@
 
 To start project locally:
 
-1. Clone repositroy https://github.com/SeferAlen/billyServices and pull/checkout branch localhost
+1. Clone repositroy https://github.com/SeferAlen/billyServices and pull/checkout branch login
 2. Open project in IDE (recommended Intellij IDEA) and configure POSTGRESQL database (host, username, password)
 3. Start app (port 9090)
 4. Admin user will be created at app start: username: Admin, password: adminPassword
