@@ -45,7 +45,7 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
     private static final String REQUEST_PARAM_NULL = "Request parameter is null";
     private static final String SERVICE_ERROR_DETAILS = "Please contact us with about this";
     private static final String DOUBLE_DOT = ": ";
-    private static final String COMA_SEPERATED = ", ";
+    private static final String COMA_SEPARATED = ", ";
 
     /**
      * Method for handling validation exception (can't have @ExceptionHandler(MethodArgumentNotValidException.class) because
@@ -74,7 +74,7 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
             errors.add(error.getObjectName() + DOUBLE_DOT + error.getDefaultMessage());
         }
 
-        final String listString = String.join(COMA_SEPERATED, errors);
+        final String listString = String.join(COMA_SEPARATED, errors);
 
         return new ResponseEntity<>(new ErrorDetails(nowFormatted, VALIDATION_FAILED, listString), HTTP_BAD_REQUEST);
     }
