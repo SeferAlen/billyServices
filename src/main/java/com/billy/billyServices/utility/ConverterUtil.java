@@ -46,6 +46,18 @@ public class ConverterUtil {
     }
 
     /**
+     * Generic method for list conversion
+     *
+     * @param converterFunction {@link Function<List, T>} functional interface implementation function for conversion
+     * @param from {@link List} the list to be converted
+     * @return {@link List<T>} the converted List containing items of type T
+     */
+    private static <T> List<T> listConverter(final Function<List, List<T>> converterFunction, final List from) {
+
+        return converterFunction.apply(from);
+    }
+
+    /**
      * Method for converting {@link List<Bill>} to {@link List<BillResponse>}
      *
      * @param bills {@link List<Bill>} the bills
@@ -86,17 +98,5 @@ public class ConverterUtil {
         }
 
         return billyUserResponses;
-    }
-
-    /**
-     * Generic method for list conversion
-     *
-     * @param converterFunction {@link Function<List, T>} functional interface implementation function for conversion
-     * @param from {@link List} the list to be converted
-     * @return {@link List<T>} the converted List containing items of type T
-     */
-    private static <T> List<T> listConverter(final Function<List, List<T>> converterFunction, final List from) {
-
-        return converterFunction.apply(from);
     }
 }

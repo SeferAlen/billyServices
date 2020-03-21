@@ -48,7 +48,8 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
     private static final String COMA_SEPERATED = ", ";
 
     /**
-     * Method for handling validation exception
+     * Method for handling validation exception (can't have @ExceptionHandler(MethodArgumentNotValidException.class) because
+     * of ambiguity with Spring ResponseEntityExceptionHandler)
      *
      * @param ex {@link MethodArgumentNotValidException} the thrown exception
      * @param headers {@link HttpHeaders}                the http headers

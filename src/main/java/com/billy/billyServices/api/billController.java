@@ -93,7 +93,7 @@ public class billController extends basicController {
                         if (result.getBills().isEmpty()) return new ResponseEntity<>(EMPTY_STRING, HTTP_NO_CONTENT);
                         else return new ResponseEntity<>(result.getBills().get(ZERO), HTTP_OK);
                     }
-                    case FAILED: return new ResponseEntity<>(SERVER_ERROR_RESPONSE, HTTP_INTERNAL_ERROR);
+                    case FAILED: return new ResponseEntity<>(SERVER_ERROR_RESPONSE, HTTP_BAD_REQUEST);
                     default: return new ResponseEntity<>(SERVER_ERROR_RESPONSE, HTTP_INTERNAL_ERROR);
                 }
             } else {
@@ -128,7 +128,7 @@ public class billController extends basicController {
                         if (result.getBills().isEmpty()) return new ResponseEntity<>(EMPTY_STRING, HTTP_NO_CONTENT);
                         else return new ResponseEntity<>(result.getBills(), HTTP_OK);
                     }
-                    case FAILED: return new ResponseEntity<>(SERVER_ERROR_RESPONSE, HTTP_INTERNAL_ERROR);
+                    case FAILED: return new ResponseEntity<>(SERVER_ERROR_RESPONSE, HTTP_BAD_REQUEST);
                     default: return new ResponseEntity<>(SERVER_ERROR_RESPONSE, HTTP_INTERNAL_ERROR);
                 }
             } else {
