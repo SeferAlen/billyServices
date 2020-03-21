@@ -43,6 +43,6 @@ and body "{
 
 P.S: watch out about Authorization header correct syntax
 
-7. clone repository https://github.com/SeferAlen/BillyApp
-8. Open project in IDE (recommended VisualStudioCode) and pull/checkout branch localhost
-9. In terminal in BillyApp project type ng serve (node must be installed)
+8. clone repository https://github.com/SeferAlen/BillyApp
+9. Open project in IDE (recommended VisualStudioCode) and pull/checkout branch localhost
+10. In terminal in BillyApp project type ng serve (node must be installed)
