@@ -47,7 +47,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         Objects.requireNonNull(login, LOGIN_NULL);
 
         try {
-            final Login dbLoginJpaRepository = loginRepository.findByUsername(login.getUsername());
+            // final Login dbLoginJpaRepository = loginRepository.findByUsername(login.getUsername());
             final Login dbLoginSQL = loginDb.findByUsername(login.getUsername());
 
             if (dbLoginSQL == null) return new AuthenticationResult(STATUS_NOT_FOUND, NO_TOKEN);
