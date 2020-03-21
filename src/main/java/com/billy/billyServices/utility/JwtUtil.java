@@ -29,6 +29,7 @@ public class JwtUtil implements Serializable {
     private static final String CLAIMS_RESOLVER_NULL = "Claims resolver function must not be null";
     private static final String LOGIN_NULL = "Login must not be null";
     private static final String CLAIM_ROLE = "Role";
+    private static final String CUT = ", ";
     private static final int TOKEN_EXPIRATION = 5000;
     private static final long serialVersionUID = -2550185165626007488L;
     private static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60;
@@ -63,7 +64,7 @@ public class JwtUtil implements Serializable {
             loginRolesList.add(role.getName());
         }
 
-        final String roles = String.join(", ", loginRolesList);
+        final String roles = String.join(CUT, loginRolesList);
         claims.put(CLAIM_ROLE, roles);
 
         return doGenerateToken(claims, login.getUsername());

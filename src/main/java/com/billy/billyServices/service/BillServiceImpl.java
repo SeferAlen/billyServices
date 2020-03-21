@@ -87,7 +87,7 @@ public class BillServiceImpl implements BillService {
 
             if (!bill.isPresent()) return new GetBillsResult(STATUS_NO_BILL);
             else {
-                List<Bill> oneBillList = new ArrayList<>();
+                final List<Bill> oneBillList = new ArrayList<>();
                 oneBillList.add(bill.get());
                 return new GetBillsResult(new ArrayList<>(ConverterUtil.billUserResponse(oneBillList)), STATUS_BILLS_OK);
             }
