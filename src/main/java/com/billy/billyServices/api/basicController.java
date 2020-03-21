@@ -65,17 +65,14 @@ public abstract class basicController {
                     return new AuthorizationResult.Builder(STATUS_UNAUTHORIZED)
                             .withResponseEntity(new ResponseEntity<>(TOKEN_EXPIRED, HTTP_BAD_REQUEST))
                             .build();
-
                 case INVALID_FORMAT:
                     return new AuthorizationResult.Builder(STATUS_UNAUTHORIZED)
                             .withResponseEntity(new ResponseEntity<>(EMPTY_SPACE, HTTP_BAD_REQUEST))
                             .build();
-
                 case OK: {
                     final String token = auth.substring(auth.indexOf(EMPTY_SPACE));
                     return authorizationService.authorize(token, requiredRoleNames);
                 }
-
                 default: return new AuthorizationResult.Builder(STATUS_UNAUTHORIZED)
                         .withResponseEntity(new ResponseEntity<>(SERVER_ERROR_RESPONSE, HTTP_INTERNAL_ERROR))
                         .build();
@@ -83,8 +80,9 @@ public abstract class basicController {
         } catch (final Exception e) {
             logger.error(e.getLocalizedMessage());
 
-            if (e instanceof ExpiredJwtException || e instanceof UnsupportedJwtException || e instanceof MalformedJwtException ||
-                e instanceof SignatureException || e instanceof InvalidClaimException || e instanceof IllegalArgumentException) throw e;
+            if (e instanceof ExpiredJwtException || e instanceof UnsupportedJwtException || e instanceof MalformedJwtException
+                    || e instanceof SignatureException || e instanceof InvalidClaimException || e instanceof IllegalArgumentException)
+                    throw e;
 
             return new AuthorizationResult.Builder(STATUS_UNAUTHORIZED)
                     .withResponseEntity(new ResponseEntity<>(SERVER_ERROR_RESPONSE, HTTP_INTERNAL_ERROR))
