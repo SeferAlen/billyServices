@@ -29,6 +29,7 @@ public class LoginDbImpl extends DbConnection implements LoginDb {
     private static final String LAST_NAME_COLUMN = "last_name";
     private static final String PHONE_COLUMN = "phone";
     private static final String USERNAME_NULL = "username must not be null";
+    private static final int NULL = 0;
 
     private static final String FIND_BY_USERNAME_QUERY =
             "SELECT L.LOGINID, L.USERNAME, L.PASSWORD, B.BILLY_USERID, B.ADDRESS, B.FIRST_NAME, B.LAST_NAME, B.PHONE FROM LOGIN L \n" +
@@ -93,7 +94,7 @@ public class LoginDbImpl extends DbConnection implements LoginDb {
                 roles.add(new Role(rs.getString(NAME_COLUMN)));
             }
 
-            if (roles.size() != 0) return roles;
+            if (roles.size() != NULL) return roles;
             else return null;
         } catch (final SQLException e) {
             System.out.println(DB_EXCEPTION + e.getLocalizedMessage());
