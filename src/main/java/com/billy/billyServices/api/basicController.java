@@ -80,8 +80,9 @@ public abstract class basicController {
         } catch (final Exception e) {
             logger.error(e.getLocalizedMessage());
 
-            if (e instanceof ExpiredJwtException || e instanceof UnsupportedJwtException || e instanceof MalformedJwtException ||
-                e instanceof SignatureException || e instanceof InvalidClaimException || e instanceof IllegalArgumentException) throw e;
+            if (e instanceof ExpiredJwtException || e instanceof UnsupportedJwtException || e instanceof MalformedJwtException
+                    || e instanceof SignatureException || e instanceof InvalidClaimException || e instanceof IllegalArgumentException)
+                    throw e;
 
             return new AuthorizationResult.Builder(STATUS_UNAUTHORIZED)
                     .withResponseEntity(new ResponseEntity<>(SERVER_ERROR_RESPONSE, HTTP_INTERNAL_ERROR))
