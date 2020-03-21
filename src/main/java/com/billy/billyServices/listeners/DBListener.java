@@ -66,8 +66,8 @@ public class DBListener {
      * Method for creating default admin user at application start
      */
     private void createDefaultAdminUser() {
-
         Login adminLogin = loginRepository.findByUsername(ROLE_ADMIN);
+
         if (adminLogin == null) {
             final BillyUser defaultAdminUser = new BillyUser(ROLE_ADMIN, ROLE_ADMIN, EMPTY_STRING, EMPTY_STRING);
             adminLogin = new Login(ROLE_ADMIN, defaultPassword);
