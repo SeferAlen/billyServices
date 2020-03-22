@@ -128,13 +128,9 @@ public class UserServiceImpl implements UserService {
 
         try {
             final List<BillyUser> users = userRepository.findAll();
-            final Login adminLogin = loginRepository.findByUsername(ROLE_ADMIN);
-            final UUID adminUUID = adminLogin.getBillyUser().getBilly_userID();
 
             if (users.isEmpty()) return new GetUsersResult(NO_USERS);
-            else {
-                return new GetUsersResult(ConverterUtil.billyUserResponse(users), GET_USERS_STATUS_OK);
-            }
+            else return new GetUsersResult(ConverterUtil.billyUserResponse(users), GET_USERS_STATUS_OK);
         } catch (final Exception e) {
             logger.error(e.getLocalizedMessage());
 

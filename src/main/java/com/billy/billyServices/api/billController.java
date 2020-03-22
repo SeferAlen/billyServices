@@ -86,9 +86,7 @@ public class billController extends basicController {
                 final GetBillsResult result = billService.getBill(uuid);
 
                 switch (result.getStatus()) {
-                    case BILL_NO_EXIST: {
-                        return new ResponseEntity<>(String.format(BILL_NOT_FOUND, uuid.toString()), HTTP_BAD_REQUEST);
-                    }
+                    case BILL_NO_EXIST: return new ResponseEntity<>(String.format(BILL_NOT_FOUND, uuid.toString()), HTTP_BAD_REQUEST);
                     case OK: {
                         if (result.getBills().isEmpty()) return new ResponseEntity<>(EMPTY_STRING, HTTP_NO_CONTENT);
                         else return new ResponseEntity<>(result.getBills().get(ZERO), HTTP_OK);
@@ -157,16 +155,13 @@ public class billController extends basicController {
             final GetBillsResult result = billService.getBills(uuid);
 
             switch (result.getStatus()) {
-                case USERNAME_NO_EXIST:
-                    return new ResponseEntity<>(USERNAME_NO_EXIST, HTTP_BAD_REQUEST);
+                case USERNAME_NO_EXIST: return new ResponseEntity<>(USERNAME_NO_EXIST, HTTP_BAD_REQUEST);
                 case OK: {
                     if (result.getBills().isEmpty()) return new ResponseEntity<>(EMPTY_STRING, HTTP_NO_CONTENT);
                     else return new ResponseEntity<>(result.getBills(), HTTP_OK);
                 }
-                case FAILED:
-                    return new ResponseEntity<>(SERVER_ERROR_RESPONSE, HTTP_INTERNAL_ERROR);
-                default:
-                    return new ResponseEntity<>(SERVER_ERROR_RESPONSE, HTTP_INTERNAL_ERROR);
+                case FAILED: return new ResponseEntity<>(SERVER_ERROR_RESPONSE, HTTP_BAD_REQUEST);
+                default: return new ResponseEntity<>(SERVER_ERROR_RESPONSE, HTTP_INTERNAL_ERROR);
             }
         } else {
             return authorizationResult.getResponseEntity();

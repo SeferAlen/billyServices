@@ -57,9 +57,7 @@ public class userController extends basicController {
 
             switch (getUsersResult.getStatus()) {
                 case NO_USERS: return new ResponseEntity<>(HTTP_NO_CONTENT);
-                case OK: {
-                    return new ResponseEntity<>(getUsersResult.getUsers(), HTTP_OK);
-                }
+                case OK: return new ResponseEntity<>(getUsersResult.getUsers(), HTTP_OK);
                 case FAILED: return new ResponseEntity<>(SERVER_ERROR_RESPONSE, HTTP_BAD_REQUEST);
                 default: return new ResponseEntity<>(SERVER_ERROR_RESPONSE, HTTP_INTERNAL_ERROR);
             }
@@ -81,8 +79,8 @@ public class userController extends basicController {
 
         switch (createStatus) {
             case ALREADY_EXIST: return new ResponseEntity<>(ALREADY_EXIST_RESPONSE, HTTP_BAD_REQUEST);
-            case FAILED: return new ResponseEntity<>(USER_CREATE_FAILED_RESPONSE, HTTP_BAD_REQUEST);
             case CREATED: return new ResponseEntity<>(CREATED_RESPONSE, HTTP_CREATED);
+            case FAILED: return new ResponseEntity<>(USER_CREATE_FAILED_RESPONSE, HTTP_BAD_REQUEST);
             default: return new ResponseEntity<>(SERVER_ERROR_RESPONSE, HTTP_INTERNAL_ERROR);
         }
     }

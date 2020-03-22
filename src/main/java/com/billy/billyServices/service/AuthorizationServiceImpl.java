@@ -80,9 +80,11 @@ public class AuthorizationServiceImpl implements AuthorizationService {
                 allowedRoles.add(role.getName());
             }
 
-            if (allowedRoles.contains(dbRoleJpaRepository.getName())) return new AuthorizationResult.Builder(STATUS_AUTHORIZED).build();
-            else return new AuthorizationResult.Builder(STATUS_UNAUTHORIZED).withResponseEntity(new ResponseEntity<>(UNAUTHORIZED, HTTP_UNAUTHORIZED))
-                        .build();
+            if (allowedRoles.contains(dbRoleJpaRepository.getName())) return new AuthorizationResult.Builder(STATUS_AUTHORIZED)
+                    .build();
+            else return new AuthorizationResult.Builder(STATUS_UNAUTHORIZED)
+                    .withResponseEntity(new ResponseEntity<>(UNAUTHORIZED, HTTP_UNAUTHORIZED))
+                    .build();
         } catch (final Exception e) {
             logger.error(e.getLocalizedMessage());
 
