@@ -87,7 +87,7 @@ public class BillServiceImplTest {
         Mockito.when(loginRepository.findByUsername(USERNAME)).thenReturn(login);
         Assert.assertEquals(billService.create(bill, USERNAME), STATUS_CREATED);
 
-        Mockito.verify(loginRepository, Mockito.times(TWO)).findByUsername(USERNAME);
+        Mockito.verify(billRepository, Mockito.times(ONE)).save(bill);
     }
 
     @Test
