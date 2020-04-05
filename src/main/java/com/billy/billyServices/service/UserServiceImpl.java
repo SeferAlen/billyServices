@@ -129,12 +129,16 @@ public class UserServiceImpl implements UserService {
         try {
             final List<BillyUser> users = userRepository.findAll();
 
-            if (users.isEmpty()) return new GetUsersResult(NO_USERS);
-            else return new GetUsersResult(ConverterUtil.billyUserResponse(users), GET_USERS_STATUS_OK);
+            if (users.isEmpty()) return new GetUsersResult.Builder(NO_USERS)
+                    .build();
+            else return new GetUsersResult.Builder(GET_USERS_STATUS_OK)
+                    .withUsers(ConverterUtil.billyUserResponse(users))
+                    .build();
         } catch (final Exception e) {
             logger.error(e.getLocalizedMessage());
 
-            return new GetUsersResult(GET_USERS_STATUS_FAILED);
+            return new GetUsersResult.Builder(GET_USERS_STATUS_FAILED)
+                    .build();
         }
     }
 
@@ -147,6 +151,7 @@ public class UserServiceImpl implements UserService {
      * @return {@link UserCreateStatus} the status representing user creation action result
      */
     private UserCreateStatus create(final BillyUser billyUser, final Login login, final Role role) {
+
         try {
             if (loginRepository.findAll()
                     .stream()

@@ -143,7 +143,8 @@ public class JwtUtil {
 
         final Claims claims = Jwts.parser()
                 .setSigningKey(DatatypeConverter.parseBase64Binary(jwtSecret))
-                .parseClaimsJws(token).getBody();
+                .parseClaimsJws(token)
+                .getBody();
 
         return claims;
     }

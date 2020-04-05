@@ -57,7 +57,7 @@ public abstract class basicController {
      */
     protected AuthorizationResult authorize(final String auth, final List<String> requiredRoleNames) {
 
-        try{
+        try {
             final TokenStatus tokenStatus = authorizationService.checkToken(auth);
 
             switch (tokenStatus) {

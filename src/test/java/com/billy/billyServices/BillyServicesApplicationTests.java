@@ -9,5 +9,4 @@ class BillyServicesApplicationTests {
 	@Test
 	void contextLoads() {
 	}
-
 }

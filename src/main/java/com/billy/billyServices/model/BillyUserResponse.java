@@ -119,4 +119,32 @@ public class BillyUserResponse {
     public void setPhone(String phone) {
         this.phone = phone;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+
+        if (obj == this) return true;
+
+        if (!(obj instanceof BillyUserResponse)) return false;
+
+        final BillyUserResponse comparable = (BillyUserResponse) obj;
+
+        return this.billy_userID.equals(comparable.billy_userID) &&
+               this.first_name.equals(comparable.first_name) &&
+               this.last_name.equals(comparable.last_name) &&
+               this.address.equals(comparable.address) &&
+               this.phone.equals(comparable.phone);
+    }
+
+    @Override
+    public int hashCode() {
+
+        int result = 17;
+        result = 31 * result + billy_userID.hashCode();
+        result = 31 * result + first_name.hashCode();
+        result = 31 * result + last_name.hashCode();
+        result = 31 * result + address.hashCode();
+        result = 31 * result + phone.hashCode();
+        return result;
+    }
 }
