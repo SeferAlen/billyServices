@@ -5,6 +5,8 @@ import io.jsonwebtoken.InvalidClaimException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureException;
 import io.jsonwebtoken.UnsupportedJwtException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,10 +44,12 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
     private static final String TOKEN_MALFORMED = "Malformed token";
     private static final String TOKEN_SIGNATURE_INVALID = "Token signature not valid";
     private static final String TOKEN_ILLEGAL = "Illegal token";
-    private static final String REQUEST_PARAM_NULL = "Request parameter is null";
+    private static final String REQUEST_PARAM_NULL = "Parameter is null";
     private static final String SERVICE_ERROR_DETAILS = "Please contact us with about this";
     private static final String DOUBLE_DOT = ": ";
     private static final String COMA_SEPARATED = ", ";
+
+    private final Logger logger = LoggerFactory.getLogger(CustomizedResponseEntityExceptionHandler.class);
 
     /**
      * Method for handling validation exception (can't have @ExceptionHandler(MethodArgumentNotValidException.class) because
@@ -173,18 +177,16 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
      * Method for default exception handling
      *
      * @param ex       {@link MethodArgumentNotValidException} the thrown exception
-     * @param request  {@link HttpHeaders}                     the http headers
-     * @param response {@link HttpStatus}                      the http status
      * @return {@link ResponseEntity} with {@link ErrorDetails} as body and {@link HttpStatus} http status
      */
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<Object> defaultExceptionHandle(final Exception ex,
-                                                         final HttpServletRequest request,
-                                                         final HttpServletResponse response) {
+    public ResponseEntity<Object> defaultExceptionHandle(final Exception ex) {
         Objects.requireNonNull(ex, EXCEPTION_NULL);
 
+        logger.error(ex.getLocalizedMessage());
+
         if (ex instanceof NullPointerException) {
-            new ResponseEntity(REQUEST_PARAM_NULL, HTTP_INTERNAL_ERROR);
+            return new ResponseEntity(REQUEST_PARAM_NULL, HTTP_INTERNAL_ERROR);
         }
         return new ResponseEntity(SERVICE_ERROR_DETAILS, HTTP_INTERNAL_ERROR);
     }

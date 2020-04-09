@@ -1,6 +1,7 @@
 package com.billy.billyServices.model;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 /**
  * Class for post new user register
@@ -8,8 +9,10 @@ import javax.validation.Valid;
 public class Register {
 
     @Valid
+    @NotNull
     private BillyUser billyUser;
     @Valid
+    @NotNull
     private Login login;
 
     /**

@@ -9,6 +9,7 @@ import javax.validation.constraints.NotNull;
 public class NewBill {
 
     @Valid
+    @NotNull
     private Bill bill;
     @NotNull
     private String username;
