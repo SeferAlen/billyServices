@@ -16,15 +16,15 @@ import java.util.UUID;
  * Class for Role db entity
  */
 @Entity
-@Table(name = "role")
+@Table(name = "\"Role\"")
 public class Role implements Serializable {
 
     @Id
     @GeneratedValue
-    @Column(name = "roleID")
+    @Column(name = "\"Role_ID\"")
     private UUID roleID;
     @NotNull
-    @Column(name = "name")
+    @Column(name = "\"Name\"")
     private String name;
     @ManyToMany(fetch = FetchType.LAZY,
             mappedBy = "roles")

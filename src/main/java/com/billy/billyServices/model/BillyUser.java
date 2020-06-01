@@ -20,24 +20,24 @@ import java.util.UUID;
  * Class for Login db entity
  */
 @Entity
-@Table(name = "billy_user")
+@Table(name = "\"Billy_User\"")
 public class BillyUser implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "billy_userID")
+    @Column(name = "\"Billy_user_ID\"")
     private UUID billy_userID;
     @NotNull
-    @Column(name = "first_name")
+    @Column(name = "\"First_name\"")
     private String first_name;
     @NotNull
-    @Column(name = "last_name")
+    @Column(name = "\"Last_name\"")
     private String last_name;
     @NotNull
-    @Column(name = "address")
+    @Column(name = "\"Address\"")
     private String address;
     @NotNull
-    @Column(name = "phone")
+    @Column(name = "\"Phone\"")
     private String phone;
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @OneToOne(mappedBy = "billyUser")

@@ -8,6 +8,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -19,22 +20,23 @@ import java.util.UUID;
  * Class for Bill db entity
  */
 @Entity
-@Table(name = "bill")
+@Table(name = "\"Bill\"")
 public class Bill implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "billID")
+    @Column(name = "\"Bill_ID\"")
     private UUID billID;
     @NotNull
-    @Column(name = "total")
+    @Column(name = "\"Total\"")
     private float total;
     @NotNull
     @JsonFormat(pattern="yyyy-MM")
-    @Column(name = "date")
+    @Column(name = "\"Date\"")
     private Date date;
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "\"Owner\"")
     private BillyUser owner;
 
     /**

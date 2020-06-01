@@ -21,28 +21,28 @@ import java.util.UUID;
  * Class for Login db entity
  */
 @Entity
-@Table(name = "login")
+@Table(name = "\"Login\"")
 public class Login implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "loginID")
+    @Column(name = "\"Login_ID\"")
     private UUID loginID;
     @NotNull
-    @Column(name = "username")
+    @Column(name = "\"Username\"")
     private String username;
     @NotNull
     @Size(min = 8, message = "Password must be at least 8 characters long")
-    @Column(name = "password")
+    @Column(name = "\"Password\"")
     private String password;
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "billy_userID")
+    @JoinColumn(name = "\"Billy_user\"")
     private BillyUser billyUser;
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
-            name = "login_roles",
-            joinColumns = @JoinColumn(name = "loginID"),
-            inverseJoinColumns = @JoinColumn(name = "roleID"))
+            name = "\"Login_Role\"",
+            joinColumns = @JoinColumn(name = "\"Login_ID\""),
+            inverseJoinColumns = @JoinColumn(name = "\"Role_ID\""))
     private Set<Role> roles;
 
     /**
