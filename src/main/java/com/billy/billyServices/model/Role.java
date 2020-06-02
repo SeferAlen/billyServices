@@ -17,6 +17,7 @@ import java.util.UUID;
  */
 @Entity
 @Table(name = "\"Role\"")
+@org.hibernate.annotations.Immutable
 public class Role implements Serializable {
 
     @Id

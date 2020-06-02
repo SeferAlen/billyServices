@@ -1,5 +1,7 @@
 package com.billy.billyServices.model;
 
+import org.hibernate.annotations.GenerationTime;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -11,9 +13,12 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Set;
 import java.util.UUID;
 
@@ -38,6 +43,10 @@ public class Login implements Serializable {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "\"Billy_user\"")
     private BillyUser billyUser;
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "\"Registered_on\"", updatable = false) // JPA will not include this column in UPDATE statement's generation
+    @org.hibernate.annotations.CreationTimestamp
+    private Date registerOn;
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "\"Login_Role\"",
@@ -151,6 +160,16 @@ public class Login implements Serializable {
      */
     public void setBillyUser(BillyUser billyUser) {
         this.billyUser = billyUser;
+    }
+
+
+    /**
+     * Gets register on.
+     *
+     * @return the register on
+     */
+    public Date getRegisterOn() {
+        return registerOn;
     }
 
     /**
