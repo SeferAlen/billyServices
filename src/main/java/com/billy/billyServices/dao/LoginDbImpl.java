@@ -1,5 +1,6 @@
 package com.billy.billyServices.dao;
 
+import com.billy.billyServices.model.Address;
 import com.billy.billyServices.model.BillyUser;
 import com.billy.billyServices.model.Login;
 import com.billy.billyServices.model.Role;
@@ -24,7 +25,9 @@ public class LoginDbImpl extends DbConnection implements LoginDb {
     private static final String PASSWORD_COLUMN = "password";
     private static final String BILLY_USERID_COLUMN = "billy_userid";
     private static final String LOGIN_ID_COLUMN = "loginid";
-    private static final String ADDRESS_COLUMN = "address";
+    private static final String ADDRESS_COLUMN_STREET = "Street";
+    private static final String ADDRESS_COLUMN_ZIPCODE = "Zipcode";
+    private static final String ADDRESS_COLUMN_CITY = "City";
     private static final String FIRST_NAME_COLUMN = "first_name";
     private static final String LAST_NAME_COLUMN = "last_name";
     private static final String PHONE_COLUMN = "phone";
@@ -58,9 +61,13 @@ public class LoginDbImpl extends DbConnection implements LoginDb {
                  login = new Login(rs.getString(USERNAME_COLUMN),
                                    rs.getString(PASSWORD_COLUMN),
                                    new BillyUser(UUID.fromString(rs.getString(BILLY_USERID_COLUMN)),
-                                           rs.getString(ADDRESS_COLUMN),
                                            rs.getString(FIRST_NAME_COLUMN),
                                            rs.getString(LAST_NAME_COLUMN),
+                                           new Address(
+                                                   rs.getString(ADDRESS_COLUMN_STREET),
+                                                   rs.getString(ADDRESS_COLUMN_ZIPCODE),
+                                                   rs.getString(ADDRESS_COLUMN_CITY)
+                                           ),
                                            rs.getString(PHONE_COLUMN)
                                    ),
                                    getRoles(rs.getString(LOGIN_ID_COLUMN))

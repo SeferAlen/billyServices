@@ -10,7 +10,7 @@ public class BillyUserResponse {
     private UUID billy_userID;
     private String first_name;
     private String last_name;
-    private String address;
+    private Address address;
     private String phone;
 
     /**
@@ -22,7 +22,7 @@ public class BillyUserResponse {
      * @param address      the address
      * @param phone        the phone
      */
-    public BillyUserResponse(UUID billy_userID, String first_name, String last_name, String address, String phone) {
+    public BillyUserResponse(UUID billy_userID, String first_name, String last_name, Address address, String phone) {
         this.billy_userID = billy_userID;
         this.first_name = first_name;
         this.last_name = last_name;
@@ -89,7 +89,7 @@ public class BillyUserResponse {
      *
      * @return the address
      */
-    public String getAddress() {
+    public Address getAddress() {
         return address;
     }
 
@@ -98,7 +98,7 @@ public class BillyUserResponse {
      *
      * @param address the address
      */
-    public void setAddress(String address) {
+    public void setAddress(Address address) {
         this.address = address;
     }
 

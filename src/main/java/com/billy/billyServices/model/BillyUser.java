@@ -33,9 +33,7 @@ public class BillyUser implements Serializable {
     @NotNull
     @Column(name = "\"Last_name\"")
     private String last_name;
-    @NotNull
-    @Column(name = "\"Address\"")
-    private String address;
+    private Address address;
     @NotNull
     @Column(name = "\"Phone\"")
     private String phone;
@@ -60,7 +58,7 @@ public class BillyUser implements Serializable {
      * @param address    the address
      * @param phone      the phone
      */
-    public BillyUser(@NotNull String first_name, @NotNull String last_name, @NotNull String address, @NotNull String phone) {
+    public BillyUser(@NotNull String first_name, @NotNull String last_name, @NotNull Address address, @NotNull String phone) {
         this.first_name = first_name;
         this.last_name = last_name;
         this.address = address;
@@ -76,7 +74,7 @@ public class BillyUser implements Serializable {
      * @param address      the address
      * @param phone        the phone
      */
-    public BillyUser(UUID billy_userID, @NotNull String first_name, @NotNull String last_name, @NotNull String address, @NotNull String phone) {
+    public BillyUser(UUID billy_userID, @NotNull String first_name, @NotNull String last_name, @NotNull Address address, @NotNull String phone) {
         this.billy_userID = billy_userID;
         this.first_name = first_name;
         this.last_name = last_name;
@@ -143,7 +141,7 @@ public class BillyUser implements Serializable {
      *
      * @return the address
      */
-    public String getAddress() {
+    public Address getAddress() {
         return address;
     }
 
@@ -152,7 +150,7 @@ public class BillyUser implements Serializable {
      *
      * @param address the address
      */
-    public void setAddress(String address) {
+    public void setAddress(Address address) {
         this.address = address;
     }
 

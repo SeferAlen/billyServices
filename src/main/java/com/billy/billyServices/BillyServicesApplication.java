@@ -10,5 +10,4 @@ public class BillyServicesApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(BillyServicesApplication.class, args);
 	}
-
 }

@@ -4,6 +4,7 @@ import com.billy.billyServices.BillyServicesApplication;
 import com.billy.billyServices.enums.BillCreateStatus;
 import com.billy.billyServices.enums.GetBillsStatus;
 import com.billy.billyServices.listeners.DBListener;
+import com.billy.billyServices.model.Address;
 import com.billy.billyServices.model.Bill;
 import com.billy.billyServices.model.BillResponse;
 import com.billy.billyServices.model.BillyUser;
@@ -42,15 +43,16 @@ public class BillServiceImplTest {
     private static final String lastName1 = "Sefer";
     private static final String lastName2 = "Perić";
     private static final String lastName3 = "Patak";
-    private static final String address1 = "alensefer1990@gmail.com";
-    private static final String address2 = "peroperic@gmail.com";
-    private static final String address3 = "pajoPatak@gmail.com";
+    private static final String address1 = "Kopčić b.b.";
+    private static final String address2 = "Zagreb Savska ceska 121";
+    private static final String address3 = "New York Brooklyn 32";
     private static final String phone1 = "alensefer1990@gmail.com";
     private static final String phone2 = "peroperic@gmail.com";
     private static final String phone3 = "pajoPatak@gmail.com";
     private static final String PASSWORD = "Password";
     private static final String ROLE_ADMIN = "Admin";
     private static final String ROLE_USER = "User";
+    private static final String EMPTY_STRING = "";
     private static final int ONE = 1;
     private static final int TWO = 2;
     private static final int THREE = 3;
@@ -63,10 +65,14 @@ public class BillServiceImplTest {
     private static final GetBillsStatus STATUS_NO_BILL = GetBillsStatus.BILL_NO_EXIST;
     private static final GetBillsStatus STATUS_BILLS_OK = GetBillsStatus.OK;
     private static final GetBillsStatus STATUS_BILLS_FAILED = GetBillsStatus.FAILED;
+    private static final Address ADDRESS_1 = new Address(address1, EMPTY_STRING, EMPTY_STRING);
+    private static final Address ADDRESS_2 = new Address(address2, EMPTY_STRING, EMPTY_STRING);
+    private static final Address ADDRESS_3 = new Address(address3, EMPTY_STRING, EMPTY_STRING);
 
-    private final BillyUser user1 = new BillyUser(firstName1, lastName1, address1, phone1);
-    private final BillyUser user2 = new BillyUser(firstName2, lastName2, address2, phone2);
-    private final BillyUser user3 = new BillyUser(firstName3, lastName3, address3, phone3);
+
+    private final BillyUser user1 = new BillyUser(firstName1, lastName1, ADDRESS_1, phone1);
+    private final BillyUser user2 = new BillyUser(firstName2, lastName2, ADDRESS_2, phone2);
+    private final BillyUser user3 = new BillyUser(firstName3, lastName3, ADDRESS_3, phone3);
 
     final Bill bill = new Bill(TOTAL, NOW, user1);
 

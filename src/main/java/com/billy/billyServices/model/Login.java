@@ -51,7 +51,8 @@ public class Login implements Serializable {
     @JoinTable(
             name = "\"Login_Role\"",
             joinColumns = @JoinColumn(name = "\"Login_ID\""),
-            inverseJoinColumns = @JoinColumn(name = "\"Role_ID\""))
+            inverseJoinColumns = @JoinColumn(name = "\"Role_ID\"")
+    )
     private Set<Role> roles;
 
     /**

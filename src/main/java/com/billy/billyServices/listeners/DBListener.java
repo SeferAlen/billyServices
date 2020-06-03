@@ -1,5 +1,6 @@
 package com.billy.billyServices.listeners;
 
+import com.billy.billyServices.model.Address;
 import com.billy.billyServices.model.BillyUser;
 import com.billy.billyServices.model.Login;
 import com.billy.billyServices.model.Role;
@@ -24,6 +25,7 @@ public class DBListener {
     private static final String ROLE_USER = "User";
     private static final String EMPTY_STRING = "";
     private static final int ZERO = 0;
+    private static final Address EMPTY_ADDRESS = new Address(EMPTY_STRING, EMPTY_STRING, EMPTY_STRING);
 
     @Autowired
     private RoleRepository roleRepository;
@@ -69,7 +71,7 @@ public class DBListener {
         Login adminLogin = loginRepository.findByUsername(ROLE_ADMIN);
 
         if (adminLogin == null) {
-            final BillyUser defaultAdminUser = new BillyUser(ROLE_ADMIN, ROLE_ADMIN, EMPTY_STRING, EMPTY_STRING);
+            final BillyUser defaultAdminUser = new BillyUser(ROLE_ADMIN, ROLE_ADMIN, EMPTY_ADDRESS, EMPTY_STRING);
             adminLogin = new Login(ROLE_ADMIN, defaultPassword);
 
             userService.createAdmin(defaultAdminUser, adminLogin);
