@@ -73,7 +73,7 @@ public class userController extends basicController {
      * @return {@link ResponseEntity} the response entity with body containing status of user creation action and Http status
      */
     @PostMapping(value = "", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody final Register register) {
+    public ResponseEntity<?> registerUser(@RequestBody @Valid final Register register) {
 
         final UserCreateStatus createStatus = userService.createUser(register.getBillyUser(), register.getLogin());
 
@@ -94,7 +94,7 @@ public class userController extends basicController {
     @CrossOrigin()
     @PostMapping(value = "/password", consumes = "application/json", produces = "application/json")
     public ResponseEntity<?> changePassword(@RequestHeader("Authorization") final String auth,
-                                            @Valid@RequestBody final NewPassword newPassword) {
+                                            @RequestBody @Valid final NewPassword newPassword) {
 
         final AuthorizationResult authorizationResult = authorize(auth, ALL_ROLES);
 

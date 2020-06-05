@@ -35,7 +35,7 @@ public class loginController extends basicController {
      */
     @CrossOrigin()
     @PostMapping(value = "", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<?> login(@RequestBody@Valid final Login login) {
+    public ResponseEntity<?> login(@RequestBody @Valid final Login login) {
 
         final AuthenticationResult authenticationResult = authenticationService.generateJwt(login);
 

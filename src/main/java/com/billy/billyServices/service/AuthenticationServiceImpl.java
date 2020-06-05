@@ -46,14 +46,14 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         Objects.requireNonNull(login, LOGIN_NULL);
 
         try {
-            // final Login dbLoginJpaRepository = loginRepository.findByUsername(login.getUsername());
-            final Login dbLoginSQL = loginDb.findByUsername(login.getUsername());
+            final Login dbLoginJpaRepository = loginRepository.findByUsername(login.getUsername());
+            // final Login dbLoginSQL = loginDb.findByUsername(login.getUsername());
 
-            if (dbLoginSQL == null) return new AuthenticationResult(STATUS_NOT_FOUND, NO_TOKEN);
-            final boolean passwordCorrect = passwordEncoder.matches(login.getPassword(), dbLoginSQL.getPassword());
+            if (dbLoginJpaRepository == null) return new AuthenticationResult(STATUS_NOT_FOUND, NO_TOKEN);
+            final boolean passwordCorrect = passwordEncoder.matches(login.getPassword(), dbLoginJpaRepository.getPassword());
             if (!passwordCorrect) return new AuthenticationResult(STATUS_WRONG_PASSWORD, NO_TOKEN);
 
-            return new AuthenticationResult(STATUS_OK, JwtUtil.generateToken(dbLoginSQL));
+            return new AuthenticationResult(STATUS_OK, JwtUtil.generateToken(dbLoginJpaRepository));
         } catch (final Exception e) {
             logger.error(e.getLocalizedMessage());
 

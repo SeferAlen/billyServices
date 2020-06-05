@@ -8,6 +8,7 @@ import com.billy.billyServices.model.Address;
 import com.billy.billyServices.model.Bill;
 import com.billy.billyServices.model.BillResponse;
 import com.billy.billyServices.model.BillyUser;
+import com.billy.billyServices.model.City;
 import com.billy.billyServices.model.GetBillsResult;
 import com.billy.billyServices.model.Login;
 import com.billy.billyServices.repository.BillRepository;
@@ -43,9 +44,18 @@ public class BillServiceImplTest {
     private static final String lastName1 = "Sefer";
     private static final String lastName2 = "Perić";
     private static final String lastName3 = "Patak";
-    private static final String address1 = "Kopčić b.b.";
-    private static final String address2 = "Zagreb Savska ceska 121";
-    private static final String address3 = "New York Brooklyn 32";
+    private static final String city1 = "Bugojno";
+    private static final String city2 = "Zagreb";
+    private static final String city3 = "New York";
+    private static final String street1 = "Kopčić b.b.";
+    private static final String street2 = "Zagreb Savska ceska 121";
+    private static final String street3 = "New York Brooklyn 32";
+    private static final String zipcode1 = "70230";
+    private static final String zipcode2 = "16783";
+    private static final String zipcode3 = "43234";
+    private static final String country1 = "Bosnia and Herzegovina";
+    private static final String country2 = "Croatia";
+    private static final String country3 = "USA";
     private static final String phone1 = "alensefer1990@gmail.com";
     private static final String phone2 = "peroperic@gmail.com";
     private static final String phone3 = "pajoPatak@gmail.com";
@@ -65,9 +75,9 @@ public class BillServiceImplTest {
     private static final GetBillsStatus STATUS_NO_BILL = GetBillsStatus.BILL_NO_EXIST;
     private static final GetBillsStatus STATUS_BILLS_OK = GetBillsStatus.OK;
     private static final GetBillsStatus STATUS_BILLS_FAILED = GetBillsStatus.FAILED;
-    private static final Address ADDRESS_1 = new Address(address1, EMPTY_STRING, EMPTY_STRING);
-    private static final Address ADDRESS_2 = new Address(address2, EMPTY_STRING, EMPTY_STRING);
-    private static final Address ADDRESS_3 = new Address(address3, EMPTY_STRING, EMPTY_STRING);
+    private static final Address ADDRESS_1 = new Address(firstName1 + lastName1, new City(city1, street1, zipcode1, country1));
+    private static final Address ADDRESS_2 = new Address(firstName2 + lastName2, new City(city2, street2, zipcode2, country2));
+    private static final Address ADDRESS_3 = new Address(firstName3 + lastName3, new City(city3, street3, zipcode3, country3));
 
 
     private final BillyUser user1 = new BillyUser(firstName1, lastName1, ADDRESS_1, phone1);

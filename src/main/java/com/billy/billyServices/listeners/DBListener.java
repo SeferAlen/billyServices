@@ -2,6 +2,7 @@ package com.billy.billyServices.listeners;
 
 import com.billy.billyServices.model.Address;
 import com.billy.billyServices.model.BillyUser;
+import com.billy.billyServices.model.City;
 import com.billy.billyServices.model.Login;
 import com.billy.billyServices.model.Role;
 import com.billy.billyServices.repository.LoginRepository;
@@ -25,7 +26,8 @@ public class DBListener {
     private static final String ROLE_USER = "User";
     private static final String EMPTY_STRING = "";
     private static final int ZERO = 0;
-    private static final Address EMPTY_ADDRESS = new Address(EMPTY_STRING, EMPTY_STRING, EMPTY_STRING);
+    private static final City EMPTY_CITY = new City(EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING);
+    private static final Address EMPTY_ADDRESS = new Address(EMPTY_STRING, EMPTY_CITY);
 
     @Autowired
     private RoleRepository roleRepository;

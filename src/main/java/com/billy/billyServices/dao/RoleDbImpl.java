@@ -17,7 +17,7 @@ import java.util.Objects;
 public class RoleDbImpl extends DbConnection implements RoleDb {
     private static final String NAME_NULL = "name must not be null";
 
-    private static final String FIND_BY_NAME_QUERY = "SELECT * FROM ROLE WHERE NAME = ? ";
+    private static final String FIND_BY_NAME_QUERY = "SELECT * FROM public.\"Role\" WHERE \"Name\" = ? ";
 
     /**
      * Method for getting Role from name

@@ -1,5 +1,7 @@
 package com.billy.billyServices.model;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.validation.constraints.NotNull;
@@ -12,17 +14,18 @@ import java.util.Objects;
 public class Address {
 
     @NotNull
-    @Column(name = "\"Street\"", nullable = false) // nullable = false, because at this time Hibernate has a bug when using
+    @Column(name = "\"Owner_name\"", nullable = false) // nullable = false, because at this time Hibernate has a bug when using
     // @NotNull on embeddable - it only check runtime for bean validation, and do not create db NOT NULL constraint
-    private String street;
+    private String ownerName;
 
     @NotNull
-    @Column(name = "\"Zipcode\"", nullable = false, length = 5)
-    private String zipcode;
-
-    @NotNull
-    @Column(name = "\"City\"", nullable = false)
-    private String city;
+    @AttributeOverrides(
+            @AttributeOverride(
+                    name = "\"Name\"",
+                    column = @Column(name = "\"City\"", nullable = false)
+            )
+    )
+    private City city;
 
     /**
      * Instantiates a new Address.
@@ -33,50 +36,30 @@ public class Address {
     /**
      * Instantiates a new Address.
      *
-     * @param street  the street
-     * @param zipcode the zipcode
-     * @param city    the city
+     * @param ownerName the owner name
+     * @param city      the city
      */
-    public Address(@NotNull String street, @NotNull String zipcode, @NotNull String city) {
-        this.street = street;
-        this.zipcode = zipcode;
+    public Address(@NotNull String ownerName, @NotNull City city) {
+        this.ownerName = ownerName;
         this.city = city;
     }
 
     /**
-     * Gets street.
+     * Gets owner name.
      *
-     * @return the street
+     * @return the owner name
      */
-    public String getStreet() {
-        return street;
+    public String getOwnerName() {
+        return ownerName;
     }
 
     /**
-     * Sets street.
+     * Sets owner name.
      *
-     * @param street the street
+     * @param ownerName the owner name
      */
-    public void setStreet(String street) {
-        this.street = street;
-    }
-
-    /**
-     * Gets zipcode.
-     *
-     * @return the zipcode
-     */
-    public String getZipcode() {
-        return zipcode;
-    }
-
-    /**
-     * Sets zipcode.
-     *
-     * @param zipcode the zipcode
-     */
-    public void setZipcode(String zipcode) {
-        this.zipcode = zipcode;
+    public void setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
     }
 
     /**
@@ -84,7 +67,7 @@ public class Address {
      *
      * @return the city
      */
-    public String getCity() {
+    public City getCity() {
         return city;
     }
 
@@ -93,7 +76,7 @@ public class Address {
      *
      * @param city the city
      */
-    public void setCity(String city) {
+    public void setCity(City city) {
         this.city = city;
     }
 
@@ -108,8 +91,7 @@ public class Address {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Address address = (Address) o;
-        return Objects.equals(street, address.street) &&
-                Objects.equals(zipcode, address.zipcode) &&
+        return Objects.equals(ownerName, address.ownerName) &&
                 Objects.equals(city, address.city);
     }
 
@@ -121,8 +103,7 @@ public class Address {
     @Override
     public int hashCode() {
         int result = 17;
-        result = 31 * result + street.hashCode();
-        result = 31 * result + zipcode.hashCode();
+        result = 31 * result + ownerName.hashCode();
         result = 31 * result + city.hashCode();
         return result;
     }
