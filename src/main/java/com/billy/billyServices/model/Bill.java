@@ -28,8 +28,16 @@ public class Bill implements Serializable {
     @Column(name = "\"Bill_ID\"")
     private UUID billID;
     @NotNull
-    @Column(name = "\"Total\"")
-    private float total;
+    @org.hibernate.annotations.Type(
+            type = "monetary_amount_eur"
+    )
+    @org.hibernate.annotations.Columns(
+            columns = {
+                    @Column(name = "\"Total_amount\""),
+                    @Column(name = "\"Total_currency\"", length = 3)
+            }
+    )
+    private MonetaryAmount total;
     @NotNull
     @JsonFormat(pattern="yyyy-MM")
     @Column(name = "\"Date\"")
@@ -51,7 +59,7 @@ public class Bill implements Serializable {
      * @param total the total
      * @param date  the date
      */
-    public Bill(@NotNull float total, @NotNull Date date) {
+    public Bill(@NotNull MonetaryAmount total, @NotNull Date date) {
         this.total = total;
         this.date = date;
     }
@@ -63,7 +71,7 @@ public class Bill implements Serializable {
      * @param date  the date
      * @param owner the owner
      */
-    public Bill(@NotNull float total, @NotNull Date date, @NotNull BillyUser owner) {
+    public Bill(@NotNull MonetaryAmount total, @NotNull Date date, @NotNull BillyUser owner) {
         this.total = total;
         this.date = date;
         this.owner = owner;
@@ -83,7 +91,7 @@ public class Bill implements Serializable {
      *
      * @return the total
      */
-    public float getTotal() {
+    public MonetaryAmount getTotal() {
         return total;
     }
 
@@ -92,7 +100,7 @@ public class Bill implements Serializable {
      *
      * @param total the total
      */
-    public void setTotal(float total) {
+    public void setTotal(MonetaryAmount total) {
         this.total = total;
     }
 

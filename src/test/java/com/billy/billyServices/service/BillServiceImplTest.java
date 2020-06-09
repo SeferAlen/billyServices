@@ -11,6 +11,7 @@ import com.billy.billyServices.model.BillyUser;
 import com.billy.billyServices.model.City;
 import com.billy.billyServices.model.GetBillsResult;
 import com.billy.billyServices.model.Login;
+import com.billy.billyServices.model.MonetaryAmount;
 import com.billy.billyServices.repository.BillRepository;
 import com.billy.billyServices.repository.LoginRepository;
 import org.junit.Assert;
@@ -27,6 +28,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.math.BigDecimal;
+import java.util.Currency;
 import java.util.Date;
 import java.util.UUID;
 
@@ -84,7 +87,7 @@ public class BillServiceImplTest {
     private final BillyUser user2 = new BillyUser(firstName2, lastName2, ADDRESS_2, phone2);
     private final BillyUser user3 = new BillyUser(firstName3, lastName3, ADDRESS_3, phone3);
 
-    final Bill bill = new Bill(TOTAL, NOW, user1);
+    final Bill bill = new Bill(new MonetaryAmount(new BigDecimal(3.22), Currency.getInstance("USD")), NOW, user1);
 
     @Autowired
     private BillService billService;

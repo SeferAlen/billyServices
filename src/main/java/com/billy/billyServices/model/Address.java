@@ -103,8 +103,10 @@ public class Address {
     @Override
     public int hashCode() {
         int result = 17;
+
         result = 31 * result + ownerName.hashCode();
         result = 31 * result + city.hashCode();
+
         return result;
     }
 }

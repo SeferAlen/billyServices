@@ -8,7 +8,7 @@ import java.util.UUID;
 public class BillResponse {
 
     private UUID billId;
-    private float total;
+    private MonetaryAmount total;
     private String date;
 
     /**
@@ -18,7 +18,7 @@ public class BillResponse {
      * @param total  the total
      * @param date   the date
      */
-    public BillResponse(UUID billId, float total, String date) {
+    public BillResponse(UUID billId, MonetaryAmount total, String date) {
         this.billId = billId;
         this.total = total;
         this.date = date;
@@ -47,7 +47,7 @@ public class BillResponse {
      *
      * @return the total
      */
-    public float getTotal() {
+    public MonetaryAmount getTotal() {
         return total;
     }
 
@@ -56,7 +56,7 @@ public class BillResponse {
      *
      * @param total the total
      */
-    public void setTotal(float total) {
+    public void setTotal(MonetaryAmount total) {
         this.total = total;
     }
 
