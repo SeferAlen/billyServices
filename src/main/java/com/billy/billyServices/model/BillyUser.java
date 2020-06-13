@@ -41,7 +41,10 @@ public class BillyUser implements Serializable {
     @OneToOne(mappedBy = "billyUser")
     private Login login;
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
+    @OneToMany(
+            mappedBy = "owner",
+            cascade = CascadeType.ALL
+    )
     private Set<Bill> bills;
 
     /**

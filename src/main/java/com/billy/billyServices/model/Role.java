@@ -27,8 +27,10 @@ public class Role implements Serializable {
     @NotNull
     @Column(name = "\"Name\"")
     private String name;
-    @ManyToMany(fetch = FetchType.LAZY,
-            mappedBy = "roles")
+    @ManyToMany(
+            fetch = FetchType.LAZY,
+            mappedBy = "roles"
+    )
     private Set<Login> logins;
 
     /**
