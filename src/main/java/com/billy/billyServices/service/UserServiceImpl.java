@@ -155,7 +155,12 @@ public class UserServiceImpl implements UserService {
         try {
             if (loginRepository.findAll()
                     .stream()
-                    .anyMatch(dbLogin -> dbLogin.getUsername().equals(login.getUsername()))) {
+                    .anyMatch(
+                            dbLogin -> dbLogin.getUsername().equals(
+                                    login.getUsername()
+                            )
+                    )
+            ) {
                 return STATUS_ALREADY_EXIST;
             } else {
                 userRepository.save(billyUser);

@@ -115,7 +115,8 @@ public class BillServiceImpl implements BillService {
             final List<Bill> bills = billRepository.findAll().stream()
                                                              .filter(
                                                                 bill -> bill.getOwner().getBilly_userID().equals(userID)
-                                                             ).collect(Collectors.toList());
+                                                             ).collect(Collectors.toList()
+                    );
 
             return new GetBillsResult(new ArrayList<>(ConverterUtil.billUserResponse(bills)), STATUS_BILLS_OK);
         } catch (final Exception e) {
